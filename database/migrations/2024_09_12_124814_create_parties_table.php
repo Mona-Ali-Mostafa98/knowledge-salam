@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 255);
             $table->integer('country_id')->nullable();
+            $table->string('election_campaign_logo', 255)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

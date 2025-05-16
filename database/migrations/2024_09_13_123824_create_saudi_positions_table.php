@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('direction_id')->nullable();
             $table->integer('sector_id');
             $table->text('tags')->nullable();
+            $table->string('title')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -11,11 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('people_orientations', function (Blueprint $table) {
+        Schema::create('people_orientations', function (Blueprint $table) {
+            $table->id();
+            $table->integer('person_id');
+            $table->integer('parties_id');
+            $table->integer('orientation_id');
+            $table->integer('commitment_id');
+            $table->longText('political_positions');
             $table->boolean('has_party')->default(0);
             $table->longText('meeting_points')->nullable();
             $table->longText('saudi_issue_position')->nullable();
-            $table->dropColumn('statements');
+            $table->longText('political_positions')->change()->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -24,8 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('people_orientations', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('orientations');
     }
 };

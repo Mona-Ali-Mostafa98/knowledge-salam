@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('note')->nullable();
             $table->integer('person_id')->nullable();
             $table->integer('organization_id')->nullable();
+            $table->integer('issue_name_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

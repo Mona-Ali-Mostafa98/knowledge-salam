@@ -20,8 +20,12 @@ return new class extends Migration
             $table->date('start')->nullable();
             $table->date('end')->nullable();
             $table->text('details')->nullable();
-            $table->text('experience')->nullable();
             $table->integer('influence_id')->nullable();
+            $table->integer('start')->change();
+            $table->integer('end')->change();
+            $table->date('start')->change()->nullable();
+            $table->date('end')->change()->nullable();
+            $table->text('institution')->change()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

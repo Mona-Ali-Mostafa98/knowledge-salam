@@ -15,11 +15,16 @@ return new class extends Migration
             $table->id();
             $table->integer('person_id');
             $table->string('institution', 200);
-            $table->string('position', 200);
-            $table->string('influence', 200)->nullable();
             $table->timestamp('start')->nullable();
             $table->timestamp('end')->nullable();
             $table->text('description')->nullable();
+            $table->integer('organization_type_id');
+            $table->integer('organization_level_id');
+            $table->integer('institution_type_id');
+            $table->integer('position_id')->nullable();
+            $table->integer('specialization_id')->nullable();
+            $table->integer('influence_level_id')->nullable();
+            $table->text('institution')->change()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

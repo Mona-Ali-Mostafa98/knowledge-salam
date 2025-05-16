@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('logo', 255)->nullable();
             $table->integer('continent_id')->nullable();
             $table->integer('country_id')->nullable();
-            $table->string('money_resource', 255)->nullable();
             $table->string('boss', 255)->nullable();
             $table->text('details')->nullable();
             $table->string('website', 255)->nullable();
@@ -28,7 +27,17 @@ return new class extends Migration
             $table->text('references')->nullable();
             $table->string('email', 200)->nullable();
             $table->string('mobile', 200)->nullable();
-            $table->string('address', 250)->nullable();
+            $table->integer('organization_level_id')->nullable();
+            $table->integer('money_resource_id')->nullable();
+            $table->integer('city_id')->nullable();
+            $table->boolean('global_influencer')->nullable();
+            $table->boolean('saudi_interested')->nullable();
+            $table->text('address')->nullable();
+            $table->date('boss_join')->nullable();
+            $table->date('boss_leave')->nullable();
+            $table->text('website')->change()->nullable();
+            $table->text('email')->change()->nullable();
+            $table->longText('resources')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

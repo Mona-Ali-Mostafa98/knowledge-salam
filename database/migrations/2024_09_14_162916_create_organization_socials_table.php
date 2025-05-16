@@ -17,6 +17,8 @@ return new class extends Migration
             $table->integer('type_id');
             $table->string('link', 200);
             $table->integer('status_id');
+            $table->integer('flower_count')->default(0);
+            $table->integer('influence_level_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

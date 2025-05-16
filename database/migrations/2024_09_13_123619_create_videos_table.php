@@ -20,6 +20,8 @@ return new class extends Migration
             $table->text('details')->nullable();
             $table->integer('direction_id')->nullable();
             $table->text('tags')->nullable();
+            $table->integer('position_type_id')->nullable();
+            $table->text('video_link')->change()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
