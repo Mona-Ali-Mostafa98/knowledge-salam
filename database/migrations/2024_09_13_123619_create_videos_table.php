@@ -15,13 +15,12 @@ return new class extends Migration
             $table->id();
             $table->integer('person_id');
             $table->string('title', 255);
-            $table->string('video_link', 255);
+            $table->string('video_link', 255)->nullable();
             $table->timestamp('publish_date')->nullable();
             $table->text('details')->nullable();
             $table->integer('direction_id')->nullable();
             $table->text('tags')->nullable();
             $table->integer('position_type_id')->nullable();
-            $table->text('video_link')->change()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

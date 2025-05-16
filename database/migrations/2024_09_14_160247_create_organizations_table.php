@@ -21,11 +21,11 @@ return new class extends Migration
             $table->integer('country_id')->nullable();
             $table->string('boss', 255)->nullable();
             $table->text('details')->nullable();
-            $table->string('website', 255)->nullable();
+            $table->text('website')->nullable();
             $table->text('added_reason')->nullable();
             $table->integer('status_id')->nullable();
             $table->text('references')->nullable();
-            $table->string('email', 200)->nullable();
+            $table->text('email')->nullable();
             $table->string('mobile', 200)->nullable();
             $table->integer('organization_level_id')->nullable();
             $table->integer('money_resource_id')->nullable();
@@ -35,8 +35,6 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->date('boss_join')->nullable();
             $table->date('boss_leave')->nullable();
-            $table->text('website')->change()->nullable();
-            $table->text('email')->change()->nullable();
             $table->longText('resources')->nullable();
             $table->timestamps();
             $table->softDeletes();

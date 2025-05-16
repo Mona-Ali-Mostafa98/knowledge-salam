@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->integer('person_id');
             $table->integer('type_id');
-            $table->string('link', 200);
+            $table->longText('link')->nullable();
             $table->integer('status_id');
             $table->integer('flower_count')->default(0);
             $table->integer('influence_level_id')->nullable();
-            $table->text('link')->change()->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });

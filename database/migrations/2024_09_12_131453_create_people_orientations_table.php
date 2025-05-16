@@ -17,11 +17,10 @@ return new class extends Migration
             $table->integer('parties_id');
             $table->integer('orientation_id');
             $table->integer('commitment_id');
-            $table->longText('political_positions');
+            $table->longText('political_positions')->nullable();
             $table->boolean('has_party')->default(0);
             $table->longText('meeting_points')->nullable();
             $table->longText('saudi_issue_position')->nullable();
-            $table->longText('political_positions')->change()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

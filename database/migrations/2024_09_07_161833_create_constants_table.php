@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('constants', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
+            $table->longText('name')->nullable();
             $table->string('type', 100);
-            $table->longText('name')->change()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

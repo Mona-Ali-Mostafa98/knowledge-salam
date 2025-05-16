@@ -14,18 +14,13 @@ return new class extends Migration
         Schema::create('people_experiences', function (Blueprint $table) {
             $table->id();
             $table->integer('person_id');
-            $table->string('institution', 255);
+            $table->string('institution', 255)->nullable();
             $table->string('qualification', 255)->nullable();
             $table->integer('specializations_id')->nullable();
-            $table->date('start')->nullable();
-            $table->date('end')->nullable();
+            $table->date('start')->nullable(); // Only declare once, no change()
+            $table->date('end')->nullable();   // Only declare once, no change()
             $table->text('details')->nullable();
             $table->integer('influence_id')->nullable();
-            $table->integer('start')->change();
-            $table->integer('end')->change();
-            $table->date('start')->change()->nullable();
-            $table->date('end')->change()->nullable();
-            $table->text('institution')->change()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

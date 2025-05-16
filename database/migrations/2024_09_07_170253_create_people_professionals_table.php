@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('people_professionals', function (Blueprint $table) {
             $table->id();
             $table->integer('person_id');
-            $table->string('institution', 200);
+            $table->string('institution', 200)->nullable();
             $table->timestamp('start')->nullable();
             $table->timestamp('end')->nullable();
             $table->text('description')->nullable();
@@ -24,7 +24,6 @@ return new class extends Migration
             $table->integer('position_id')->nullable();
             $table->integer('specialization_id')->nullable();
             $table->integer('influence_level_id')->nullable();
-            $table->text('institution')->change()->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
