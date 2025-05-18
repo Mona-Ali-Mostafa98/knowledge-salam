@@ -1,3 +1,19 @@
 @import '/vendor/filament/filament/resources/css/theme.css';
 
 @config 'tailwind.config.js';
+
+main {
+    background: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+.custom-login-card {
+    border: 2px solid #066166;
+    background: #f9fafb;
+    box-shadow: 0 4px 24px rgba(6, 97, 102, 0.08);
+    transition: all 3s;
+}
+
+.custom-login-card:hover {
+    transform: translateY(-10px);
+}

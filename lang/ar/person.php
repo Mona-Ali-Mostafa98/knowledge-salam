@@ -133,4 +133,12 @@ return [
     'person_position' => 'موقف الشخصية السياسي',
     'saudi_position' => 'موقف المملكة من الموقف السياسي',
     'resources' => 'المصادر',
+
+    'job_title' => 'الوظيفة',
+    'registration_purpose' => 'الغرض من إنشاء الحساب',
+    'national_id'=> 'رقم الهوية الوطنية',
+
+    'bio'=> 'نبذه تعريفيه',
+    'organization_id' => 'المنظمة التابع لها (أن وجدت)',
+
 ];

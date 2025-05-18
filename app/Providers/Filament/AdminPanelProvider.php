@@ -19,6 +19,8 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use SolutionForest\FilamentTranslateField\FilamentTranslateFieldPlugin;
+use App\Filament\Helper\CustomRegister;
+use App\Filament\Helper\CustomLogin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -28,7 +30,8 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(CustomLogin::class)
+            ->Registration(CustomRegister::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -58,7 +61,7 @@ class AdminPanelProvider extends PanelProvider
             ])->colors([
                 'primary' => '#066166',
             ])
-            ->darkMode(false)
+            ->darkMode(true)
             ->navigationGroups([
                 NavigationGroup::make()
                     ->label(__('system.system_constants'))
