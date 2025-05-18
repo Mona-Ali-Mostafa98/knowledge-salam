@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        //القضايا التي تدافع عنها الشخصية
         Schema::create('people_issues', function (Blueprint $table) {
             $table->id();
             $table->integer('person_id');

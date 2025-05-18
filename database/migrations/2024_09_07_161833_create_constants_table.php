@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // الثوابت
         Schema::create('constants', function (Blueprint $table) {
             $table->id();
             $table->longText('name')->nullable();

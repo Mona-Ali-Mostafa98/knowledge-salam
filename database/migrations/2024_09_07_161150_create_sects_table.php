@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // المذاهب
         Schema::create('sects', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);

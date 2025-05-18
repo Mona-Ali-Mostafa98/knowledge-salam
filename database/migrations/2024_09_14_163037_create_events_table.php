@@ -13,20 +13,43 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 255);
-            $table->integer('country_id')->nullable();
-            $table->integer('city_id')->nullable();
-            $table->integer('sector_id')->nullable();
-            $table->text('organization_position')->nullable();
-            $table->integer('organization_role_id')->nullable();
-            $table->longText('details')->nullable();
-            $table->integer('saudi_direction_id')->nullable();
-            $table->text('saudi_direction')->nullable();
-            $table->text('tags')->nullable();
-            $table->date('event_date')->nullable();
+            $table->string('title', 255)->comment('عنوان الحدث');
+            // address
+            $table->integer('country_id')->nullable()->comment('دولة الحدث');
+            $table->integer('city_id')->nullable()->comment('مدينة الحدث');
+            $table->string('venue')->nullable()->comment('مكان الحدث التفصيلي');
+
+            // التوصيف
+            $table->integer('sector_id')->nullable()->comment('القطاع المعني');
+            $table->date('event_date')->nullable()->comment('تاريخ الحدث');
+            $table->longText('details')->nullable()->comment('تفاصيل الحدث');
+            $table->enum('event_type', [
+                'article', 'tweet', 'video', 'report', 'conference',
+                'workshop', 'meeting', 'seminar', 'press_release',
+                'interview', 'publication', 'announcement', 'webinar',
+                'panel_discussion'])->nullable()->comment('نوع الحدث');
+//            $table->text('issues_discussed')->nullable()->comment('القضايا التي يناقشها الحدث');
+            $table->text('tags')->nullable()->comment('الكلمات المفتاحية');
+
+
+            //$table->foreignId('organization_id')->nullable()->constrained('organizations')->nullOnDelete()->comment('المنظمة المرتبطة بالحدث');
+            $table->integer('organization_role_id')->nullable()->comment('دور المنظمة');
+            $table->text('organization_position')->nullable()->comment('موقف المنظمة من الحدث');
+            $table->text('saudi_direction')->nullable()->comment('موقف المملكة من الحدث');
+            $table->integer('saudi_direction_id')->nullable()->comment('موقف المملكة');
+
+            $table->string('url')->nullable()->comment('رابط الحدث');
+            $table->enum('approval_status', ['pending', 'reviewed', 'approved', 'rejected'])->default('pending')->comment('حالة الطلب');
+            $table->enum('event_status', ['scheduled', 'ongoing', 'completed', 'cancelled'])->default('scheduled')->comment('حالة تنفيذ الحدث');
+//            $table->string('media_url')->nullable()->comment('رابط فيديو أو صور متعلقة بالحدث');
+//            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete()->comment('المستخدم الذي أضاف الحدث');
+//            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete()->comment('آخر من عدّل الحدث');
+//            $table->foreignId('related_event_id')->nullable()->constrained('events')->nullOnDelete()->comment('حدث مرتبط / تابع');
+
             $table->timestamps();
             $table->softDeletes();
         });
+
     }
 
     /**

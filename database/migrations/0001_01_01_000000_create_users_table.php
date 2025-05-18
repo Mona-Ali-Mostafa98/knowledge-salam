@@ -13,10 +13,24 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name'); // الاسم الكامل
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+
+            $table->string('mobile')->nullable()->comment('رقم الجوال');
+            $table->string('job_title')->nullable()->comment('الوظيفة أو الصفة');
+            $table->string('national_id')->nullable()->comment('رقم الهوية الوطنية');
+            $table->text('bio')->nullable()->comment('رسالة تعريفية عن المستخدم');
+            $table->string('organization_id')->nullable()->comment('الجهة التابع لها');
+            $table->string('sector_id')->nullable()->comment('القطاع التابع له');
+            $table->text('registration_purpose')->nullable()->comment('الغرض من إنشاء الحساب');
+            $table->string('identity_document')->nullable()->comment('صورة الهوية الوطنية');
+            $table->string('photo')->nullable()->comment('الصورة الشخصية (رابط أو مسار الملف)');
+            $table->enum('requested_role', ['content_manager', 'event_manager', 'report_viewer', 'admin'])->nullable()->comment('الدور المطلوب من المستخدم');
+            $table->enum('approval_status', ['pending', 'reviewed', 'approved', 'rejected'])->default('pending')->comment('حالة الطلب');
+            $table->timestamp('approved_at')->nullable()->comment('تاريخ القبول في النظام');
+
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();

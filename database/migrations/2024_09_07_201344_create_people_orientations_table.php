@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // التوجهات السياسية
         Schema::create('people_orientations', function (Blueprint $table) {
             $table->id();
             $table->integer('person_id');

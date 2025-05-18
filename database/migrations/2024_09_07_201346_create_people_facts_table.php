@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('people_dimensions', function (Blueprint $table) {
+        // الحقائق والإنجازات
+        Schema::create('people_facts', function (Blueprint $table) {
             $table->id();
             $table->integer('person_id');
-            $table->integer('dimension_id');
             $table->text('details')->nullable();
+            $table->timestamp('fact_date')->nullable();
+            $table->integer('achievement_id');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('people_dimensions');
+        Schema::dropIfExists('people_facts');
     }
 };
