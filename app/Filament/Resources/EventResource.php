@@ -6,7 +6,12 @@ use App\Filament\Resources\EventResource\Pages;
 use App\Models\Event;
 use App\Models\Person;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -29,43 +34,76 @@ class EventResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make([
+                Section::make([
                     Translate::make()
                         ->schema(fn (string $locale) => [
-                            Forms\Components\TextInput::make('title')
+                            TextInput::make('title')
                                 ->required()
                                 ->label(__(self::$langFile.'.title'))
                                 ->maxLength(100)
                                 ->required($locale == 'ar'),
-                        ])->locales(['ar', 'en']),
-                    Forms\Components\Select::make('country_id')
+                    ])->locales(['ar', 'en']),
+                    Select::make('country_id')
                         ->relationship('country', 'name')
                         ->label(__(self::$langFile.'.country_id')),
-                    Forms\Components\Select::make('city_id')
+                    Select::make('city_id')
                         ->relationship('city', 'name')
                         ->label(__(self::$langFile.'.city_id')),
-                    Forms\Components\Select::make('sector_id')
+                    TextInput::make('venue') // new
+                        ->label(__(self::$langFile.'.venue'))
+                        ->maxLength(100),
+                    Select::make('sector_id')
                         ->relationship('sector', 'name')
                         ->label(__(self::$langFile.'.sector_id')),
-                    Forms\Components\DatePicker::make('event_date')
+                    DatePicker::make('event_date')
                         ->label(__(self::$langFile.'.event_date'))
                         ->default(now()),
-                    Forms\Components\Select::make('organization_role_id')
-                        ->relationship('organization_role', 'name')
-                        ->label(__(self::$langFile.'.organization_role_id')),
-                    Forms\Components\Textarea::make('organization_position')
-                        ->label(__(self::$langFile.'.organization_position'))
-                        ->columnSpanFull(),
-                    Forms\Components\Textarea::make('details')
+                    Textarea::make('details')
                         ->label(__(self::$langFile.'.details'))
                         ->columnSpanFull(),
-                    Forms\Components\Textarea::make('saudi_direction')
+                    Select::make('event_type') // new
+                        ->options([
+                            'article' => 'Article',
+                            'tweet' => 'Tweet',
+                            'video' => 'Video',
+                            'report' => 'Report',
+                            'conference' => 'Conference',
+                            'workshop' => 'Workshop',
+                            'meeting' => 'Meeting',
+                            'seminar' => 'Seminar',
+                            'press_release' => 'Press Release',
+                            'interview' => 'Interview',
+                            'publication' => 'Publication',
+                            'announcement' => 'Announcement',
+                            'webinar' => 'Webinar',
+                            'panel_discussion' => 'Panel Discussion'
+                        ])
+                        ->label(__(self::$langFile . '.event_type')),
+                    Select::make('organization_role_id')
+                        ->relationship('organization_role', 'name')
+                        ->label(__(self::$langFile.'.organization_role_id')),
+                    Textarea::make('organization_position')
+                        ->label(__(self::$langFile.'.organization_position'))
+                        ->columnSpanFull(),
+                    Textarea::make('saudi_direction')
                         ->label(__(self::$langFile.'.saudi_direction'))
                         ->columnSpanFull(),
-                    Forms\Components\Select::make('saudi_direction_id')
+                    Select::make('saudi_direction_id')
                         ->relationship('saudi_direction', 'name')
                         ->label(__(self::$langFile.'.saudi_direction_id')),
-                    Forms\Components\TagsInput::make('tags')
+                    TextInput::make('url')
+                        ->nullable()
+                        ->label(__(self::$langFile.'.url')),
+                    Select::make('event_status')
+                        ->options([
+                            'scheduled' => 'Scheduled',
+                            'ongoing' => 'Ongoing',
+                            'completed' => 'Completed',
+                            'cancelled' => 'Cancelled'
+                        ])
+                        ->default('scheduled')
+                        ->label(__(self::$langFile . '.event_status')),
+                    TagsInput::make('tags')
                         ->separator(',')
                         ->label(__(self::$langFile.'.tags')),
                     Select::make('peoples')
