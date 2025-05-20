@@ -7,7 +7,7 @@ use Filament\Forms\Form;
 
 class CustomLogin extends Login
 {
-    protected static string $view = 'filament.pages.auth.login-register-form';
+    protected static string $view = 'filament.pages.auth.login';
 
     public function form(Form $form): Form
     {

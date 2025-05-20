@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('job_title')->nullable()->comment('الوظيفة أو الصفة');
             $table->string('national_id')->nullable()->comment('رقم الهوية الوطنية');
             $table->text('bio')->nullable()->comment('رسالة تعريفية عن المستخدم');
-            $table->string('organization_id')->nullable()->comment('الجهة التابع لها');
-            $table->string('sector_id')->nullable()->comment('القطاع التابع له');
+            $table->unsignedBigInteger('sector_id')->nullable()->comment('القطاع التابع له');
+            $table->unsignedBigInteger('organization_id')->nullable()->comment('الجهة التابع لها');
             $table->text('registration_purpose')->nullable()->comment('الغرض من إنشاء الحساب');
             $table->string('identity_document')->nullable()->comment('صورة الهوية الوطنية');
             $table->string('photo')->nullable()->comment('الصورة الشخصية (رابط أو مسار الملف)');

@@ -6,7 +6,20 @@ main {
     background: none !important;
     box-shadow: none !important;
     border: none !important;
+    margin: 0 !important;
 }
+
+.max-w-lg
+{
+    /*max-width: 100% !important;*/
+    min-width:70vw !important;
+    text-align: center;
+}
+
+.w-full {
+    /*width: auto !important;*/
+}
+
 .custom-login-card {
     border: 2px solid #066166;
     background: #f9fafb;
@@ -15,5 +28,5 @@ main {
 }
 
 .custom-login-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-5px);
 }

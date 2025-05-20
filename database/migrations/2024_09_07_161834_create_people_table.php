@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('last_name', 200)->nullable()->comment('الاسم الأخير / اسم العائلة');
 
             $table->date('bod')->nullable()->comment('تاريخ الميلاد');
+            $table->string('email')->nullable();
+            $table->string('mobile')->nullable();
 
             $table->integer('nationality_id')->nullable()->comment('الجنسية (معرف من جدول الجنسيات)');
             $table->integer('birth_country_id')->nullable()->comment('مكان الميلاد - الدولة (معرف من جدول الدول)');
