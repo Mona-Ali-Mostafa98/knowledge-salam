@@ -13,31 +13,31 @@ return new class extends Migration
     {
         Schema::create('saudi_articles', function (Blueprint $table) {
             $table->id();
-            $table->longText('title'); // changed from string to longText
-            $table->text('link'); // changed from string to text
-            $table->timestamp('publish_date')->nullable();
-            $table->string('publish_institution', 255)->nullable();
-            $table->text('details')->nullable();
-            $table->text('tags')->nullable();
-            $table->integer('article_type_id')->nullable();
-            $table->integer('source_location_id')->nullable();
-            $table->text('attachments')->nullable();
-            $table->integer('publish_institution_type_id')->nullable();
-            $table->integer('continent_id')->nullable();
-            $table->integer('country_id')->nullable();
-            $table->string('countries')->nullable();
-            $table->integer('language_id')->nullable();
-            $table->integer('added_reason_id')->nullable();
-            $table->integer('repetition_id')->nullable();
-            $table->integer('saudi_issue_direction_id')->nullable();
-            $table->integer('dimension_id')->nullable();
-            $table->text('dimension_text')->nullable();
-            $table->integer('contribution_type_id')->nullable();
-            $table->longText('contribution_name')->nullable(); // changed from string to longText
-            $table->integer('organizations_role_id')->nullable();
-            $table->integer('contribution_role_id')->nullable();
-            $table->integer('report_direction_id')->nullable();
-            $table->string('cities', 255)->nullable();
+            $table->longText('title')->comment('العنوان');
+            $table->text('link')->comment('الرابط');
+            $table->timestamp('publish_date')->nullable()->comment('تاريخ النشر');
+            $table->string('publish_institution', 255)->nullable()->comment('الجهة الناشرة');
+            $table->text('details')->nullable()->comment('التفاصيل');
+            $table->text('tags')->nullable()->comment('الكلمات المفتاحية');
+            $table->integer('article_type_id')->nullable()->comment('نوع المقال');
+            $table->integer('source_location_id')->nullable()->comment('مكان المصدر');
+            $table->text('attachments')->nullable()->comment('المرفقات');
+            $table->integer('publish_institution_type_id')->nullable()->comment('نوع الجهة الناشرة');
+            $table->integer('continent_id')->nullable()->comment('القارة');
+            $table->integer('country_id')->nullable()->comment('الدولة');
+            $table->string('countries')->nullable()->comment('الدول  المعنية');
+            $table->integer('language_id')->nullable()->comment('اللغة');
+            $table->integer('added_reason_id')->nullable()->comment('سبب الإضافة');
+            $table->integer('repetition_id')->nullable()->comment('دورية التقرير');
+            $table->integer('saudi_issue_direction_id')->nullable()->comment('توجه المملكة');
+            $table->integer('dimension_id')->nullable()->comment('البعد');
+            $table->text('dimension_text')->nullable()->comment('الوصف ');
+            $table->integer('contribution_type_id')->nullable()->comment('نوع المساهمة');
+            $table->longText('contribution_name')->nullable()->comment('اسم المساهم');
+            $table->integer('organizations_role_id')->nullable()->comment('دور المنظمة');
+            $table->integer('contribution_role_id')->nullable()->comment('دور المساهم');
+            $table->integer('report_direction_id')->nullable()->comment('اتجاه التقرير');
+            $table->string('cities', 255)->nullable()->comment('المدن');
             $table->timestamps();
             $table->softDeletes();
         });

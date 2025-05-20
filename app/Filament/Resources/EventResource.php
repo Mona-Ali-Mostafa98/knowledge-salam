@@ -42,7 +42,9 @@ class EventResource extends Resource
                                 ->label(__(self::$langFile.'.title'))
                                 ->maxLength(100)
                                 ->required($locale == 'ar'),
-                    ])->locales(['ar', 'en']),
+                        ])
+                        ->locales(['ar', 'en'])
+                        ->columnSpanFull(),
                     Select::make('country_id')
                         ->relationship('country', 'name')
                         ->label(__(self::$langFile.'.country_id')),
@@ -63,21 +65,21 @@ class EventResource extends Resource
                         ->columnSpanFull(),
                     Select::make('event_type') // new
                         ->options([
-                            'article' => 'Article',
-                            'tweet' => 'Tweet',
-                            'video' => 'Video',
-                            'report' => 'Report',
-                            'conference' => 'Conference',
-                            'workshop' => 'Workshop',
-                            'meeting' => 'Meeting',
-                            'seminar' => 'Seminar',
-                            'press_release' => 'Press Release',
-                            'interview' => 'Interview',
-                            'publication' => 'Publication',
-                            'announcement' => 'Announcement',
-                            'webinar' => 'Webinar',
-                            'panel_discussion' => 'Panel Discussion'
-                        ])
+                                'article' => __(self::$langFile . '.event_type_options.article'),
+                                'tweet' => __(self::$langFile . '.event_type_options.tweet'),
+                                'video' => __(self::$langFile . '.event_type_options.video'),
+                                'report' => __(self::$langFile . '.event_type_options.report'),
+                                'conference' => __(self::$langFile . '.event_type_options.conference'),
+                                'workshop' => __(self::$langFile . '.event_type_options.workshop'),
+                                'meeting' => __(self::$langFile . '.event_type_options.meeting'),
+                                'seminar' => __(self::$langFile . '.event_type_options.seminar'),
+                                'press_release' => __(self::$langFile . '.event_type_options.press_release'),
+                                'interview' => __(self::$langFile . '.event_type_options.interview'),
+                                'publication' => __(self::$langFile . '.event_type_options.publication'),
+                                'announcement' => __(self::$langFile . '.event_type_options.announcement'),
+                                'webinar' => __(self::$langFile . '.event_type_options.webinar'),
+                                'panel_discussion' => __(self::$langFile . '.event_type_options.panel_discussion'),
+                            ])
                         ->label(__(self::$langFile . '.event_type')),
                     Select::make('organization_role_id')
                         ->relationship('organization_role', 'name')
@@ -96,10 +98,10 @@ class EventResource extends Resource
                         ->label(__(self::$langFile.'.url')),
                     Select::make('event_status')
                         ->options([
-                            'scheduled' => 'Scheduled',
-                            'ongoing' => 'Ongoing',
-                            'completed' => 'Completed',
-                            'cancelled' => 'Cancelled'
+                            'scheduled' => __(self::$langFile.'.event_status_options.scheduled'),
+                            'ongoing' => __(self::$langFile.'.event_status_options.ongoing'),
+                            'completed' => __(self::$langFile.'.event_status_options.completed'),
+                            'cancelled' => __(self::$langFile.'.event_status_options.cancelled')
                         ])
                         ->default('scheduled')
                         ->label(__(self::$langFile . '.event_status')),
@@ -113,7 +115,6 @@ class EventResource extends Resource
                         ->label(__(self::$langFile.'.event_peoples'))
                         ->searchable()
                         ->default(null),
-
                 ])->columns(3),
             ]);
     }

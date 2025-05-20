@@ -31,20 +31,22 @@ return new class extends Migration
 //            $table->text('issues_discussed')->nullable()->comment('القضايا التي يناقشها الحدث');
             $table->text('tags')->nullable()->comment('الكلمات المفتاحية');
 
-
-            //$table->foreignId('organization_id')->nullable()->constrained('organizations')->nullOnDelete()->comment('المنظمة المرتبطة بالحدث');
+            $table->foreignId('organization_id')->nullable()->constrained('organizations')->nullOnDelete()->comment('المنظمة المرتبطة بالحدث');
             $table->integer('organization_role_id')->nullable()->comment('دور المنظمة');
             $table->text('organization_position')->nullable()->comment('موقف المنظمة من الحدث');
             $table->text('saudi_direction')->nullable()->comment('موقف المملكة من الحدث');
             $table->integer('saudi_direction_id')->nullable()->comment('موقف المملكة');
 
             $table->string('url')->nullable()->comment('رابط الحدث');
-            $table->enum('approval_status', ['pending', 'reviewed', 'approved', 'rejected'])->default('pending')->comment('حالة الطلب');
+            $table->enum('approval_status', ['pending', 'reviewed', 'approved', 'rejected'])->default('pending')->comment('حالة الحدث');
             $table->enum('event_status', ['scheduled', 'ongoing', 'completed', 'cancelled'])->default('scheduled')->comment('حالة تنفيذ الحدث');
-//            $table->string('media_url')->nullable()->comment('رابط فيديو أو صور متعلقة بالحدث');
-//            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete()->comment('المستخدم الذي أضاف الحدث');
-//            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete()->comment('آخر من عدّل الحدث');
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete()->comment('المستخدم الذي أضاف الحدث');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete()->comment('آخر من عدّل الحدث');
 //            $table->foreignId('related_event_id')->nullable()->constrained('events')->nullOnDelete()->comment('حدث مرتبط / تابع');
+            $table->unsignedBigInteger('position_type_id')->nullable()->comment('نوع الموقف');
+            $table->string('person_id')->nullable()->comment('الشخصيه او الشخصيات المرتبطه بالحدث'); // multi select
+            $table->timestamp('publish_date')->nullable()->nullable()->comment('تاريخ النشر');
+            $table->text('note')->nullable()->comment('ملاحظات إضافية');
 
             $table->timestamps();
             $table->softDeletes();
