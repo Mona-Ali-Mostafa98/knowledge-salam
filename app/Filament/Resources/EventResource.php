@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\EventResource\Pages;
 use App\Models\Event;
 use App\Models\Person;
+use App\Models\Issues;
+use App\Models\Organization;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
@@ -12,6 +14,9 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\TimePicker;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -19,6 +24,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use SolutionForest\FilamentTranslateField\Forms\Component\Translate;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
 
 class EventResource extends Resource
 {
@@ -34,88 +41,252 @@ class EventResource extends Resource
     {
         return $form
             ->schema([
-                Section::make([
-                    Translate::make()
-                        ->schema(fn (string $locale) => [
-                            TextInput::make('title')
-                                ->required()
-                                ->label(__(self::$langFile.'.title'))
-                                ->maxLength(100)
-                                ->required($locale == 'ar'),
-                        ])
-                        ->locales(['ar', 'en'])
-                        ->columnSpanFull(),
-                    Select::make('country_id')
-                        ->relationship('country', 'name')
-                        ->label(__(self::$langFile.'.country_id')),
-                    Select::make('city_id')
-                        ->relationship('city', 'name')
-                        ->label(__(self::$langFile.'.city_id')),
-                    TextInput::make('venue') // new
-                        ->label(__(self::$langFile.'.venue'))
-                        ->maxLength(100),
-                    Select::make('sector_id')
-                        ->relationship('sector', 'name')
-                        ->label(__(self::$langFile.'.sector_id')),
-                    DatePicker::make('event_date')
-                        ->label(__(self::$langFile.'.event_date'))
-                        ->default(now()),
-                    Textarea::make('details')
-                        ->label(__(self::$langFile.'.details'))
-                        ->columnSpanFull(),
-                    Select::make('event_type') // new
-                        ->options([
-                                'article' => __(self::$langFile . '.event_type_options.article'),
-                                'tweet' => __(self::$langFile . '.event_type_options.tweet'),
-                                'video' => __(self::$langFile . '.event_type_options.video'),
-                                'report' => __(self::$langFile . '.event_type_options.report'),
-                                'conference' => __(self::$langFile . '.event_type_options.conference'),
-                                'workshop' => __(self::$langFile . '.event_type_options.workshop'),
-                                'meeting' => __(self::$langFile . '.event_type_options.meeting'),
-                                'seminar' => __(self::$langFile . '.event_type_options.seminar'),
-                                'press_release' => __(self::$langFile . '.event_type_options.press_release'),
-                                'interview' => __(self::$langFile . '.event_type_options.interview'),
-                                'publication' => __(self::$langFile . '.event_type_options.publication'),
-                                'announcement' => __(self::$langFile . '.event_type_options.announcement'),
-                                'webinar' => __(self::$langFile . '.event_type_options.webinar'),
-                                'panel_discussion' => __(self::$langFile . '.event_type_options.panel_discussion'),
-                            ])
-                        ->label(__(self::$langFile . '.event_type')),
-                    Select::make('organization_role_id')
-                        ->relationship('organization_role', 'name')
-                        ->label(__(self::$langFile.'.organization_role_id')),
-                    Textarea::make('organization_position')
-                        ->label(__(self::$langFile.'.organization_position'))
-                        ->columnSpanFull(),
-                    Textarea::make('saudi_direction')
-                        ->label(__(self::$langFile.'.saudi_direction'))
-                        ->columnSpanFull(),
-                    Select::make('saudi_direction_id')
-                        ->relationship('saudi_direction', 'name')
-                        ->label(__(self::$langFile.'.saudi_direction_id')),
-                    TextInput::make('url')
-                        ->nullable()
-                        ->label(__(self::$langFile.'.url')),
-                    Select::make('event_status')
-                        ->options([
-                            'scheduled' => __(self::$langFile.'.event_status_options.scheduled'),
-                            'ongoing' => __(self::$langFile.'.event_status_options.ongoing'),
-                            'completed' => __(self::$langFile.'.event_status_options.completed'),
-                            'cancelled' => __(self::$langFile.'.event_status_options.cancelled')
-                        ])
-                        ->default('scheduled')
-                        ->label(__(self::$langFile . '.event_status')),
-                    TagsInput::make('tags')
-                        ->separator(',')
-                        ->label(__(self::$langFile.'.tags')),
-                    Select::make('peoples')
-                        ->multiple()
-                        ->getOptionLabelFromRecordUsing(fn (Person $record) => ($record->name))
-                        ->relationship('peoples', 'name')
-                        ->label(__(self::$langFile.'.event_peoples'))
-                        ->searchable()
-                        ->default(null),
-                ])->columns(3),
+                Tabs::make('Event Tabs')
+                    ->tabs([
+                        Tab::make(__(self::$langFile . '.genral_information'))
+                            ->schema([
+                                Translate::make()
+                                    ->schema(fn(string $locale) => [
+                                        TextInput::make('title')
+                                            ->required()
+                                            ->label(__(self::$langFile . '.title'))
+                                            ->maxLength(100)
+                                            ->required($locale == 'ar'),
+                                    ])
+                                    ->locales(['ar', 'en'])
+                                    ->columnSpanFull(),
+                                Translate::make()
+                                    ->schema(fn(string $locale) => [
+                                        Textarea::make('details')
+                                            ->label(__(self::$langFile . '.details'))
+                                            ->columnSpanFull()
+                                            ->required($locale == 'ar'),
+                                    ])
+                                    ->locales(['ar', 'en'])
+                                    ->columnSpanFull(),
+                            ]),
+
+                        Tab::make(__(self::$langFile . '.data_and_type'))
+                            ->schema([
+                                Select::make('event_type') // new
+                                    ->options([
+                                        'article' => __(self::$langFile . '.event_type_options.article'),
+                                        'tweet' => __(self::$langFile . '.event_type_options.tweet'),
+                                        'video' => __(self::$langFile . '.event_type_options.video'),
+                                        'report' => __(self::$langFile . '.event_type_options.report'),
+                                        'conference' => __(self::$langFile . '.event_type_options.conference'),
+                                        'workshop' => __(self::$langFile . '.event_type_options.workshop'),
+                                        'meeting' => __(self::$langFile . '.event_type_options.meeting'),
+                                        'seminar' => __(self::$langFile . '.event_type_options.seminar'),
+                                        'press_release' => __(self::$langFile . '.event_type_options.press_release'),
+                                        'interview' => __(self::$langFile . '.event_type_options.interview'),
+                                        'publication' => __(self::$langFile . '.event_type_options.publication'),
+                                        'announcement' => __(self::$langFile . '.event_type_options.announcement'),
+                                        'webinar' => __(self::$langFile . '.event_type_options.webinar'),
+                                        'panel_discussion' => __(self::$langFile . '.event_type_options.panel_discussion'),
+                                    ])
+                                    ->label(__(self::$langFile . '.event_type')),
+                                DatePicker::make('event_date')
+                                    ->label(__(self::$langFile . '.event_date'))
+                                    ->required()
+                                    ->placeholder('YYYY-MM-DD')
+                                    ->default(now()),
+                                TimePicker::make('event_time')
+                                    ->label(__(self::$langFile . '.event_time'))
+                                    ->placeholder('HH:MM')
+                                    ->withoutSeconds()
+                                    ->default(now()->format('H:i')),
+
+                                TextInput::make('url')
+                                    ->nullable()
+                                    ->label(__(self::$langFile . '.url')),
+                                Select::make('event_status')
+                                    ->options([
+                                        'scheduled' => __(self::$langFile . '.event_status_options.scheduled'),
+                                        'ongoing' => __(self::$langFile . '.event_status_options.ongoing'),
+                                        'completed' => __(self::$langFile . '.event_status_options.completed'),
+                                        'cancelled' => __(self::$langFile . '.event_status_options.cancelled')
+                                    ])
+                                    ->default('scheduled')
+                                    ->label(__(self::$langFile . '.event_status')),
+
+                                Select::make('sector_id')
+                                    ->relationship('sector', 'name')
+                                    ->label(__(self::$langFile . '.sector_id')),
+                                Select::make('position_type_id')
+                                    ->relationship('position_type', 'name')
+                                    ->label(__(self::$langFile . '.position_type_id')),
+                            ]),
+
+                        Tab::make(__(self::$langFile . '.address'))
+                            ->schema([
+                                Select::make('country_id')
+                                    ->relationship('country', 'name')
+                                    ->label(__(self::$langFile . '.country_id')),
+                                Select::make('city_id')
+                                    ->relationship('city', 'name')
+                                    ->label(__(self::$langFile . '.city_id')),
+                                TextInput::make('venue') // new
+                                    ->label(__(self::$langFile . '.venue'))
+                                    ->maxLength(100)
+                                    ->columnSpanFull(),
+                                Forms\Components\Hidden::make('latitude')
+                                    ->required(),
+                                Forms\Components\Hidden::make('longitude')
+                                    ->required(),
+                                \Filament\Forms\Components\View::make('filament.pages.map')
+                                    ->label('Select Location from Map')
+                                    ->columnSpanFull(),
+                            ]),
+                        Tab::make(__(self::$langFile . '.peoples'))
+                            ->schema([
+                                Repeater::make('peoplePositionsOnIssues') // this must match the hasMany relation name
+                                    ->relationship('peoplePositionsOnIssues')
+                                    ->label(__(self::$langFile . '.event_peoples'))
+                                    ->schema([
+                                        Select::make('person_id')
+                                            // ->relationship('peoples', 'id')
+                                            ->label(__(self::$langFile . '.event_peoples'))
+                                            ->searchable(['first_name', 'mid_name', 'last_name'])
+                                            ->getOptionLabelFromRecordUsing(
+                                                fn(Person $record) => "{$record->first_name} {$record->mid_name} {$record->last_name}"
+                                            )
+                                            ->relationship('person', 'first_name') // binds to `person()` relation in pivot model
+                                            ->required(),
+
+                                        Select::make('issue_id')
+                                            ->label(__(self::$langFile . '.event_issues'))
+                                            ->searchable()
+                                            ->getOptionLabelFromRecordUsing(
+                                                fn(Issues $record) => $record->title
+                                            )
+                                            ->relationship('issue', 'title') // binds to `issue()` relation in pivot model
+                                            ->required()
+                                            ->createOptionForm([
+                                                TextInput::make('title')
+                                                    ->label(__('Title'))
+                                                    ->required()
+                                                    ->maxLength(255),
+                                            ])
+                                            ->createOptionAction(function ($action) {
+                                                return $action->modalHeading(__('Add New Issue'));
+                                            }),
+
+
+
+                                        Select::make('person_direction_id')
+                                            ->relationship('person_direction', 'name')
+                                            ->label(__(self::$langFile . '.person_direction_id')),
+
+                                        Textarea::make('person_position')
+                                            ->label(__(self::$langFile . '.person_position'))
+                                            ->nullable()
+                                            ->columnSpanFull(),
+                                    ])
+                                    ->addActionLabel(__(self::$langFile . '.add_position'))
+                                    ->columns(3)
+                                    ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                        $combinations = [];
+                                        foreach ($state as $index => $item) {
+                                            $key = ($item['person_id'] ?? null) . '-' . ($item['issue_id'] ?? null);
+                                            if (isset($combinations[$key])) {
+                                                // Set error on the duplicate row
+                                                $set("peoplePositionsOnIssues.{$index}.issue_id", null);
+                                                \Filament\Notifications\Notification::make()
+                                                    ->title(__(self::$langFile . '.Duplicate_person_and_issue'))
+                                                    ->danger()
+                                                    ->send();
+                                            }
+                                            $combinations[$key] = true;
+                                        }
+                                    }),
+                            ]),
+
+                        Tab::make(__(self::$langFile . '.organizations'))
+                            ->schema([
+                                Repeater::make('organizationPositionsOnIssues')
+                                    ->relationship('organizationPositionsOnIssues')
+                                    ->label(__(self::$langFile . '.event_organizations'))
+                                    ->schema([
+                                        Select::make('organization_id')
+                                            ->label(__(self::$langFile . '.organization_id'))
+                                            ->searchable()
+                                            ->getOptionLabelFromRecordUsing(
+                                                fn(Organization $record) => "{$record->name}"
+                                            )
+                                            ->relationship('organization', 'name')
+                                            ->required(),
+
+                                        Select::make('issue_id')
+                                            ->label(__(self::$langFile . '.event_issues'))
+                                            ->searchable()
+                                            ->getOptionLabelFromRecordUsing(
+                                                fn(Issues $record) => $record->title
+                                            )
+                                            ->relationship('issue', 'title')
+                                            ->required()
+                                            ->createOptionForm([
+                                                TextInput::make('title')
+                                                    ->label(__('Title'))
+                                                    ->required()
+                                                    ->maxLength(255),
+                                            ])
+                                            ->createOptionAction(function ($action) {
+                                                return $action->modalHeading(__('Add New Issue'));
+                                            }),
+
+                                        Select::make('organization_role_id')
+                                            ->relationship('organization_role', 'name')
+                                            ->label(__(self::$langFile . '.organization_role_id')),
+
+                                        Select::make('organization_direction_id')
+                                            ->relationship('organization_direction', 'name')
+                                            ->label(__(self::$langFile . '.organization_direction_id')),
+
+                                        Textarea::make('organization_position')
+                                            ->label(__(self::$langFile . '.organization_position'))
+                                            ->columnSpanFull(),
+                                    ])
+                                    ->columns(3)
+                                    ->addActionLabel(__(self::$langFile . '.add_position'))
+                                    ->afterStateUpdated(function ($state, callable $set, callable $get) {
+                                        $combinations = [];
+                                        foreach ($state as $index => $item) {
+                                            $key = ($item['organization_id'] ?? null) . '-' . ($item['issue_id'] ?? null);
+                                            if (isset($combinations[$key])) {
+                                                // Set error on the duplicate row
+                                                $set("organizationPositionsOnIssues.{$index}.issue_id", null);
+                                                \Filament\Notifications\Notification::make()
+                                                    ->title(__(self::$langFile . '.Duplicate_organization_and_issue'))
+                                                    ->danger()
+                                                    ->send();
+                                            }
+                                            $combinations[$key] = true;
+                                        }
+                                    }),
+                            ]),
+
+                        Tab::make(__(self::$langFile . '.issues_saudi_direction'))
+                            ->schema([
+
+                                Select::make('saudi_direction_id')
+                                    ->relationship('saudi_direction', 'name')
+                                    ->label(__(self::$langFile . '.saudi_direction_id')),
+                                Textarea::make('saudi_direction')
+                                    ->label(__(self::$langFile . '.saudi_direction'))
+                                    ->rows(1)
+                                    ->columnSpanFull(),
+                            ]),
+
+                        Tab::make(__(self::$langFile . '.tags'))
+                            ->schema([
+                                TagsInput::make('tags')
+                                    ->separator(',')
+                                    ->label(__(self::$langFile . '.tags'))
+                                    ->columnSpanFull()
+                            ]),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -124,34 +295,43 @@ class EventResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->label(__(self::$langFile.'.title'))
-                    ->searchable(),
+                    ->label(__(self::$langFile . '.title'))
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('event_date')
-                    ->label(__(self::$langFile.'.event_date'))
+                    ->label(__(self::$langFile . '.event_date'))
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('sector.name')
-                    ->label(__(self::$langFile.'.sector_id'))
+                    ->label(__(self::$langFile . '.sector_id'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('country.name')
-                    ->label(__(self::$langFile.'.country_id'))
+                    ->label(__(self::$langFile . '.country_id'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('city.name')
-                    ->label(__(self::$langFile.'.city_id'))
+                    ->label(__(self::$langFile . '.city_id'))
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('organization_role.name')
-                    ->label(__(self::$langFile.'.organization_role_id'))
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('event_type')
+                    ->label(__(self::$langFile . '.event_type'))
+                    ->sortable()
+                    ->formatStateUsing(fn($state) => __(self::$langFile . '.event_type_options.' . $state)),
+                Tables\Columns\TextColumn::make('event_status')
+                    ->label(__(self::$langFile . '.event_status'))
+                    ->sortable()
+                    ->formatStateUsing(fn($state) => __(self::$langFile . '.event_status_options.' . $state)),
+                Tables\Columns\TextColumn::make('approval_status')
+                    ->label(__(self::$langFile . '.approval_status'))
+                    ->sortable()
+                    ->formatStateUsing(fn($state) => __(self::$langFile . '.approval_status_options.' . $state)),
                 Tables\Columns\TextColumn::make('saudi_direction.name')
-                    ->label(__(self::$langFile.'.saudi_direction_id'))
+                    ->label(__(self::$langFile . '.saudi_direction_id'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label(__(self::$langFile.'.created_at'))
+                    ->label(__(self::$langFile . '.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -197,12 +377,12 @@ class EventResource extends Resource
 
     public static function getPluralLabel(): ?string
     {
-        return __(self::$langFile.'.events');
+        return __(self::$langFile . '.events');
     }
 
     public static function getLabel(): ?string
     {
-        return __(self::$langFile.'.event');
+        return __(self::$langFile . '.event');
     }
 
     public static function getNavigationBadge(): ?string

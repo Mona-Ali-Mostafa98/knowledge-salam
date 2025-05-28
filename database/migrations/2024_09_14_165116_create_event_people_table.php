@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('event_people', function (Blueprint $table) {
             $table->id();
-            $table->integer('person_id');
-            $table->integer('event_id');
+            
+
             $table->timestamps();
             $table->softDeletes();
         });

@@ -17,11 +17,15 @@ return new class extends Migration
             // address
             $table->integer('country_id')->nullable()->comment('دولة الحدث');
             $table->integer('city_id')->nullable()->comment('مدينة الحدث');
+            $table->decimal('latitude', 10, 7)->nullable()->comment('خط العرض');
+            $table->decimal('longitude', 10, 7)->nullable()->comment('خط الطول');
             $table->string('venue')->nullable()->comment('مكان الحدث التفصيلي');
 
             // التوصيف
             $table->integer('sector_id')->nullable()->comment('القطاع المعني');
             $table->date('event_date')->nullable()->comment('تاريخ الحدث');
+            $table->time('event_time')->nullable()->comment('توقيت اقامة الحدث');
+            
             $table->longText('details')->nullable()->comment('تفاصيل الحدث');
             $table->enum('event_type', [
                 'article', 'tweet', 'video', 'report', 'conference',
@@ -31,9 +35,6 @@ return new class extends Migration
 //            $table->text('issues_discussed')->nullable()->comment('القضايا التي يناقشها الحدث');
             $table->text('tags')->nullable()->comment('الكلمات المفتاحية');
 
-            $table->foreignId('organization_id')->nullable()->constrained('organizations')->nullOnDelete()->comment('المنظمة المرتبطة بالحدث');
-            $table->integer('organization_role_id')->nullable()->comment('دور المنظمة');
-            $table->text('organization_position')->nullable()->comment('موقف المنظمة من الحدث');
             $table->text('saudi_direction')->nullable()->comment('موقف المملكة من الحدث');
             $table->integer('saudi_direction_id')->nullable()->comment('موقف المملكة');
 
@@ -44,7 +45,6 @@ return new class extends Migration
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete()->comment('آخر من عدّل الحدث');
 //            $table->foreignId('related_event_id')->nullable()->constrained('events')->nullOnDelete()->comment('حدث مرتبط / تابع');
             $table->unsignedBigInteger('position_type_id')->nullable()->comment('نوع الموقف');
-            $table->string('person_id')->nullable()->comment('الشخصيه او الشخصيات المرتبطه بالحدث'); // multi select
             $table->timestamp('publish_date')->nullable()->nullable()->comment('تاريخ النشر');
             $table->text('note')->nullable()->comment('ملاحظات إضافية');
 

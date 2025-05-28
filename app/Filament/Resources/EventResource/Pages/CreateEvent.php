@@ -9,6 +9,9 @@ class CreateEvent extends CreateRecord
 {
     protected static string $resource = EventResource::class;
 
+    public $latitude;
+    public $longitude;
+
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
