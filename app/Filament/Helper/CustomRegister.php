@@ -6,8 +6,10 @@ use App\Enum\ConstantsTypes;
 use App\Models\Constant;
 use App\Models\Organization;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Notifications\Notification;
 use Filament\Pages\Auth\Register;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -66,4 +68,17 @@ class CustomRegister extends Register
         ]);
     }
 
+    protected function afterRegister(): void
+    {
+        Filament::auth()->logout();
+        Notification::make()
+            ->title(__('auth.Your account is pending approval.'))
+            ->success()
+            ->send();
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return route('filament.admin.auth.login');
+    }
 }

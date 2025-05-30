@@ -16,6 +16,6 @@ return [
     'failed' => 'These credentials do not match our records.',
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-    'Your account is pending approval.' => 'حسابك قيد الموافقة. يرجى الانتظار حتى يتم الموافقة عليه من قبل المسؤول.',
+    'Your account is pending approval.' => 'حسابك قيد الموافقة. يرجى الانتظار حتى يوافق المسؤول على حسابك قبل تسجيل الدخول.',
 
 ];
