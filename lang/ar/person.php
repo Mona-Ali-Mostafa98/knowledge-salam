@@ -137,6 +137,9 @@ return [
     'job_title' => 'الوظيفة',
     'registration_purpose' => 'الغرض من إنشاء الحساب',
     'national_id'=> 'رقم الهوية الوطنية',
+    'identity_document' => 'صورة الهوية الوطنية',
+    'requested_role'=> 'الدور المطلوب من المستخدم',
+    'approved_at' => 'تاريخ القبول في النظام',
 
     'bio'=> 'نبذه تعريفيه',
     'organization_id' => 'المنظمة التابع لها (أن وجدت)',

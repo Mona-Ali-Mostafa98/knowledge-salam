@@ -36,11 +36,76 @@ class UserResource extends Resource
                 Forms\Components\DateTimePicker::make('email_verified_at')
                     ->label(__(self::$langFile.'.email_verified_at'))
                     ->default(now()),
+                Forms\Components\TextInput::make('mobile')
+                    ->label(__('person.mobile'))
+                    ->tel()
+                    ->maxLength(20)
+                    ->rule('regex:/^[0-9+\-\s\(\)]+$/')
+                    ->unique(User::class, 'mobile', ignoreRecord: true),
                 Forms\Components\TextInput::make('password')
                     ->label(__(self::$langFile.'.password'))
                     ->required(fn (string $operation): bool => $operation === 'create')
                     ->password()
+                    ->maxLength(255)
+                    ->confirmed(),
+                Forms\Components\TextInput::make('password_confirmation')
+                    ->label(__('filament-panels::pages/auth/register.form.password_confirmation.label'))
+                    ->password()
+                    ->maxLength(255)
+                    ->dehydrated(false),
+                Forms\Components\TextInput::make('job_title')
+                    ->label(__('person.job_title'))
                     ->maxLength(255),
+                Forms\Components\TextInput::make('national_id')
+                    ->label(__('person.national_id'))
+                    ->maxLength(255),
+                Forms\Components\Textarea::make('bio')
+                    ->label(__('person.bio')),
+                Forms\Components\Select::make('sector_id')
+                    ->label(__(self::$langFile.'.sector_id'))
+                    ->relationship('sector', 'name')
+                    ->searchable(),
+                Forms\Components\Select::make('organization_id')
+                    ->label(__(self::$langFile.'.organization_id'))
+                    ->relationship('organization', 'name')
+                    ->searchable(),
+                Forms\Components\Textarea::make('registration_purpose')
+                    ->label(__('person.registration_purpose')),
+                Forms\Components\FileUpload::make('identity_document')
+                    ->label(__('person.identity_document')),
+                Forms\Components\FileUpload::make('photo')
+                    ->label(__('person.photo')),
+                Forms\Components\Select::make('requested_role')
+                    ->label(__(self::$langFile.'.requested_role'))
+                    ->options([
+                        'content_manager' => __(self::$langFile.'.requested_role_options.content_manager'),
+                        'event_manager' => __(self::$langFile.'.requested_role_options.event_manager'),
+                        'report_viewer' => __(self::$langFile.'.requested_role_options.report_viewer'),
+                        'admin' => __(self::$langFile.'.requested_role_options.admin'),
+                    ]),
+                Forms\Components\Select::make('approval_status')
+                    ->label(__(self::$langFile.'.approval_status'))
+                    ->options([
+                        'pending' => __(self::$langFile.'.approval_status_options.pending'),
+                        'reviewed' => __(self::$langFile.'.approval_status_options.reviewed'),
+                        'approved' => __(self::$langFile.'.approval_status_options.approved'),
+                        'rejected' => __(self::$langFile.'.approval_status_options.rejected'),
+                    ])
+                    ->reactive()
+                    ->afterStateUpdated(function ($state, callable $set) {
+                        if ($state === 'approved') {
+                            $set('approved_at', now());
+                        } else {
+                            $set('approved_at', null);
+                        }
+                    }),
+
+                Forms\Components\DateTimePicker::make('approved_at')
+                    ->label(__('person.approved_at'))
+                    ->dehydrated(fn ($get) => $get('approval_status') === 'approved')
+                    ->disabled(fn ($get) => $get('approval_status') !== 'approved')
+                    ->reactive(),
+
                 Forms\Components\Select::make('roles')
                     ->relationship('roles', 'name')
                     ->label(__(self::$langFile.'.roles'))
@@ -54,22 +119,65 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('photo')
+                    ->label(__('person.photo'))
+                    ->defaultImageUrl(asset('images/salam.png'))
+                    ->circular()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('name')
                     ->label(__(self::$langFile.'.name'))
-                    ->searchable()
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->label(__(self::$langFile.'.email'))
-                    ->searchable()
+                    ->sortable()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('mobile')
+                    ->label(__('person.mobile'))
+                    ->searchable()
+                    ->toggleable(),
+                Tables\Columns\SelectColumn::make('approval_status')
+                    ->label(__(self::$langFile.'.approval_status'))
+                    ->options([
+                        'pending' => __(self::$langFile.'.approval_status_options.pending'),
+                        'reviewed' => __(self::$langFile.'.approval_status_options.reviewed'),
+                        'approved' => __(self::$langFile.'.approval_status_options.approved'),
+                        'rejected' => __(self::$langFile.'.approval_status_options.rejected'),
+                    ])
+                    ->sortable()
+                    ->toggleable()
+                    ->extraAttributes([
+                        'style' => 'max-width: 9rem !important',
+                        'class' => 'min-w-[2rem] max-w-[4rem] whitespace-nowrap text-sm px-1 py-0.5',
+                    ])
+                    ->alignCenter()
+                    ->afterStateUpdated(function ($record, $state) {
+                        if ($state === 'approved') {
+                            $record->approved_at = now();
+                            $record->save();
+                        }
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__(self::$langFile.'.created_at'))
-                    ->dateTime()
+                    ->dateTime('Y-m-d H:i')
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('approved_at')
+                    ->label(__('person.approved_at'))
+                    ->dateTime('Y-m-d H:i')
                     ->sortable()
                     ->toggleable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\SelectFilter::make('approval_status')
+                    ->label(__(self::$langFile.'.approval_status'))
+                    ->options([
+                        'pending' => __(self::$langFile.'.approval_status_options.pending'),
+                        'reviewed' => __(self::$langFile.'.approval_status_options.reviewed'),
+                        'approved' => __(self::$langFile.'.approval_status_options.approved'),
+                        'rejected' => __(self::$langFile.'.approval_status_options.rejected'),
+                    ]),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

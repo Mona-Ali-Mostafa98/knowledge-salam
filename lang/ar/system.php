@@ -128,6 +128,13 @@ return [
         'approved' => 'موافق عليه',
         'rejected' => 'مرفوض',
     ],
+    'requested_role' => 'الدور المطلوب من المستخدم',
+    'requested_role_options' => [
+        'content_manager' => 'مدير محتوى',
+        'event_manager' => 'مدير حدث',
+        'report_viewer' => 'مشاهد تقارير',
+        'admin' => 'مدير النظام',
+    ],
     'url' => 'الرابط',
     'person_id' => 'الشخصيه او الشخصيات المرتبطه',
     'address' => 'العنوان',
