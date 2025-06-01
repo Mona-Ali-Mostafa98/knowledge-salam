@@ -21,6 +21,11 @@ class SaudiPositionsResource extends Resource
 
     protected static ?int $navigationSort = 4;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     protected static ?string $langFile = 'system';
 
     public static function form(Form $form): Form

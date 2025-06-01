@@ -231,4 +231,9 @@ class UserResource extends Resource
     {
         return __(self::$langFile.'.user');
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 }
