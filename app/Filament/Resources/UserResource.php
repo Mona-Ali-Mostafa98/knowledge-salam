@@ -4,8 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use App\Notifications\UserUpdateStatusNotification;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -132,10 +134,7 @@ class UserResource extends Resource
                     ->label(__(self::$langFile.'.email'))
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('mobile')
-                    ->label(__('person.mobile'))
-                    ->searchable()
-                    ->toggleable(),
+
                 Tables\Columns\SelectColumn::make('approval_status')
                     ->label(__(self::$langFile.'.approval_status'))
                     ->options([
@@ -154,8 +153,11 @@ class UserResource extends Resource
                     ->afterStateUpdated(function ($record, $state) {
                         if ($state === 'approved') {
                             $record->approved_at = now();
-                            $record->save();
+                        } else {
+                            $record->approved_at = null;
                         }
+                        $record->save();
+                        $record->notify(new UserUpdateStatusNotification($record));
                     }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__(self::$langFile.'.created_at'))

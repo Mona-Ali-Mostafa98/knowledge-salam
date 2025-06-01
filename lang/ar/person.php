@@ -144,4 +144,9 @@ return [
     'bio'=> 'نبذه تعريفيه',
     'organization_id' => 'المنظمة التابع لها (أن وجدت)',
 
+    'Your Account Status Has Been Updated' => 'تم تحديث حالة حسابك',
+    'Your account has been approved.' => 'تمت الموافقة على حسابك. يمكنك الآن تسجيل الدخول.',
+    'Your account has been rejected.' => 'تم رفض حسابك. يرجى مراجعة المشرفين لمزيد من التفاصيل.',
+    'Your account has been reviewed.' => 'تم مراجعة حسابك. يرجى الانتظار حتى يتم اتخاذ الموافقه عليه.',
+    'Login' => 'تسجيل الدخول',
 ];
