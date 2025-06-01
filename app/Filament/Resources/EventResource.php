@@ -326,10 +326,6 @@ class EventResource extends Resource
                     ->label(__(self::$langFile . '.approval_status'))
                     ->sortable()
                     ->formatStateUsing(fn($state) => __(self::$langFile . '.approval_status_options.' . $state)),
-                Tables\Columns\TextColumn::make('saudi_direction.name')
-                    ->label(__(self::$langFile . '.saudi_direction_id'))
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__(self::$langFile . '.created_at'))
                     ->dateTime()
@@ -338,8 +334,42 @@ class EventResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\SelectFilter::make('event_type')
+                    ->options([
+                        'article' => __(self::$langFile . '.event_type_options.article'),
+                        'tweet' => __(self::$langFile . '.event_type_options.tweet'),
+                        'video' => __(self::$langFile . '.event_type_options.video'),
+                        'report' => __(self::$langFile . '.event_type_options.report'),
+                        'conference' => __(self::$langFile . '.event_type_options.conference'),
+                        'workshop' => __(self::$langFile . '.event_type_options.workshop'),
+                        'meeting' => __(self::$langFile . '.event_type_options.meeting'),
+                        'seminar' => __(self::$langFile . '.event_type_options.seminar'),
+                        'press_release' => __(self::$langFile . '.event_type_options.press_release'),
+                        'interview' => __(self::$langFile . '.event_type_options.interview'),
+                        'publication' => __(self::$langFile . '.event_type_options.publication'),
+                        'announcement' => __(self::$langFile . '.event_type_options.announcement'),
+                        'webinar' => __(self::$langFile . '.event_type_options.webinar'),
+                        'panel_discussion' => __(self::$langFile . '.event_type_options.panel_discussion'),
+                    ])
+                    ->label(__(self::$langFile . '.event_type')),
+                Tables\Filters\SelectFilter::make('event_status')
+                    ->options([
+                        'scheduled' => __(self::$langFile . '.event_status_options.scheduled'),
+                        'ongoing' => __(self::$langFile . '.event_status_options.ongoing'),
+                        'completed' => __(self::$langFile . '.event_status_options.completed'),
+                        'cancelled' => __(self::$langFile . '.event_status_options.cancelled'),
+                    ])
+                    ->label(__(self::$langFile . '.event_status')),
+                Tables\Filters\SelectFilter::make('approval_status')
+                    ->options([
+                        'pending' => __(self::$langFile . '.approval_status_options.pending'),
+                        'approved' => __(self::$langFile . '.approval_status_options.approved'),
+                        'rejected' => __(self::$langFile . '.approval_status_options.rejected'),
+                    ])
+                    ->label(__(self::$langFile . '.approval_status')),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -363,6 +393,7 @@ class EventResource extends Resource
         return [
             'index' => Pages\ListEvents::route('/'),
             'create' => Pages\CreateEvent::route('/create'),
+            'view' => Pages\ViewEvent::route('/{record}'),
             'edit' => Pages\EditEvent::route('/{record}/edit'),
         ];
     }
