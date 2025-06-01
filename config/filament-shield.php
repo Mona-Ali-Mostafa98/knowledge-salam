@@ -29,6 +29,11 @@ return [
         'name' => 'panel_user',
     ],
 
+    'reviewer' => [
+        'enabled' => true,
+        'name' => 'reviewer',
+    ],
+
     'permission_prefixes' => [
         'resource' => [
             'view',
@@ -43,6 +48,16 @@ return [
             'delete_any',
             'force_delete',
             'force_delete_any',
+            'review',       // للمراجعة
+            'review_any',
+            'approve',      // تحكيم أو اعتماد
+            'approve_any',
+            'publish',      // للنشر
+            'publish_any',
+            'reject',       // للحجب أو الرفض
+            'reject_any',
+            'export',
+            'export_any',
         ],
 
         'page' => 'page',

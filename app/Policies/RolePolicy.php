@@ -105,4 +105,84 @@ class RolePolicy
     {
         return $user->can('{{ Reorder }}');
     }
+
+    /**
+     * Determine whether the user can review.
+     */
+    public function review(User $user, Role $role): bool
+    {
+        return $user->can('review_role');
+    }
+
+    /**
+     * Determine whether the user can review any.
+     */
+    public function reviewAny(User $user): bool
+    {
+        return $user->can('{{ review_any_role }}');
+    }
+
+    /**
+     * Determine whether the user can approve.
+     */
+    public function approve(User $user, Role $role): bool
+    {
+        return $user->can('approve_role');
+    }
+
+    /**
+     * Determine whether the user can approve any.
+     */
+    public function approveAny(User $user): bool
+    {
+        return $user->can('approve_any_role');
+    }
+
+    /**
+     * Determine whether the user can publish.
+     */
+    public function publish(User $user, Role $role): bool
+    {
+        return $user->can('publish_role');
+    }
+
+    /**
+     * Determine whether the user can publish any.
+     */
+    public function publishAny(User $user): bool
+    {
+        return $user->can('publish_any_role');
+    }
+
+    /**
+     * Determine whether the user can reject.
+     */
+    public function reject(User $user, Role $role): bool
+    {
+        return $user->can('reject_role');
+    }
+
+    /**
+     * Determine whether the user can reject any.
+     */
+    public function rejectAny(User $user): bool
+    {
+        return $user->can('reject_any_role');
+    }
+
+    /**
+     * Determine whether the user can export.
+     */
+    public function export(User $user, Role $role): bool
+    {
+        return $user->can('export_role');
+    }
+
+    /**
+     * Determine whether the user can export any.
+     */
+    public function exportAny(User $user): bool
+    {
+        return $user->can('export_any_role');
+    }
 }

@@ -128,4 +128,9 @@ class IssuesResource extends Resource
     {
         return __(self::$langFile.'.issue');
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 }
