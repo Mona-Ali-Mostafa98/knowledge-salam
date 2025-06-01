@@ -14,6 +14,8 @@ use Filament\Pages\Auth\Register;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Components\Grid;
+use Illuminate\Auth\Events\Registered;
+
 class CustomRegister extends Register
 {
     protected static string $view = 'filament.pages.auth.register';
@@ -21,6 +23,8 @@ class CustomRegister extends Register
     protected static ?string $langFile = 'person';
 
     protected static ?string $model = User::class;
+
+    protected ?User $newUser = null;
 
     public function form(Form $form): Form
     {
@@ -68,8 +72,21 @@ class CustomRegister extends Register
         ]);
     }
 
+    protected function handleRegistration(array $data): \Illuminate\Database\Eloquent\Model
+    {
+        /** @var class-string<\App\Models\User> $userModelClass */
+        $userModelClass = $this->getUserModel();
+
+        return $this->newUser = $userModelClass::create($data);
+    }
+
+
     protected function afterRegister(): void
     {
+        if ($this->newUser) {
+            event(new Registered($this->newUser));
+        }
+
         Filament::auth()->logout();
         Notification::make()
             ->title(__('auth.Your account is pending approval.'))

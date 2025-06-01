@@ -149,4 +149,11 @@ return [
     'Your account has been rejected.' => 'تم رفض حسابك. يرجى مراجعة المشرفين لمزيد من التفاصيل.',
     'Your account has been reviewed.' => 'تم مراجعة حسابك. يرجى الانتظار حتى يتم اتخاذ الموافقه عليه.',
     'Login' => 'تسجيل الدخول',
+
+    'New User Registration' => 'تسجيل مستخدم جديد',
+    'A new user has registered:' => 'قام مستخدم جديد بالتسجيل:',
+    'Name:' => 'الاسم: ',
+    'Email:' => 'البريد الإلكتروني: ',
+    'View User' => 'عرض المستخدم',
+    'Thank you for using our application!' => 'شكرا لاستخدامك تطبيقنا!',
 ];
