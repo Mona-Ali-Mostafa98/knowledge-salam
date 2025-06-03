@@ -285,6 +285,30 @@ class EventResource extends Resource
                                     ->label(__(self::$langFile . '.tags'))
                                     ->columnSpanFull()
                             ]),
+                        ...(
+                        auth()->user()?->hasRole('super_admin')
+                            ? [
+                            Tab::make(__(self::$langFile . '.approval_status'))
+                                ->schema([
+                                    Select::make('approval_status')
+                                        ->label(__(self::$langFile . '.approval_status'))
+                                        ->options([
+                                            'pending' => __(self::$langFile . '.approval_status_options.pending'),
+                                            'reviewed' => __(self::$langFile . '.approval_status_options.reviewed'),
+                                            'approved' => __(self::$langFile . '.approval_status_options.approved'),
+                                            'rejected' => __(self::$langFile . '.approval_status_options.rejected'),
+                                        ])
+                                        ->reactive()
+                                        ->afterStateUpdated(function ($state, callable $set) {
+                                            if ($state === 'approved') {
+                                                $set('approved_at', now());
+                                            } else {
+                                                $set('approved_at', null);
+                                            }
+                                        })
+                                        ->disableOptionWhen(fn(string $value, $record) => $value === 'super_admin' && !$record->hasRole('super_admin'), merge: true),
+                                ]),
+                        ] : []),
                     ])
                     ->columnSpanFull(),
             ]);
@@ -321,11 +345,30 @@ class EventResource extends Resource
                 Tables\Columns\TextColumn::make('event_status')
                     ->label(__(self::$langFile . '.event_status'))
                     ->sortable()
-                    ->formatStateUsing(fn($state) => __(self::$langFile . '.event_status_options.' . $state)),
+                    ->badge()
+                    ->color(fn($state) => match ($state) {
+                        'scheduled' => 'success',
+                        'ongoing' => 'warning',
+                        'completed' => 'info',
+                        'cancelled' => 'danger',
+                        default => 'secondary',
+                    })
+                    ->formatStateUsing(fn($state) => __(self::$langFile . '.event_status_options.' . $state))
+                    ->alignCenter(),
                 Tables\Columns\TextColumn::make('approval_status')
                     ->label(__(self::$langFile . '.approval_status'))
                     ->sortable()
-                    ->formatStateUsing(fn($state) => __(self::$langFile . '.approval_status_options.' . $state)),
+                    ->formatStateUsing(fn($state) => __(self::$langFile . '.approval_status_options.' . $state))
+                    ->badge()
+                    ->color(fn($state) => match ($state) {
+                        'approved' => 'success',
+                        'pending' => 'warning',
+                        'reviewed' => 'info',
+                        'rejected' => 'danger',
+                        default => 'secondary',
+                    })
+                    ->toggleable()
+                    ->alignCenter(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__(self::$langFile . '.created_at'))
                     ->dateTime()
