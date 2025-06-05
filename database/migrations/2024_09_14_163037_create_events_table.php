@@ -25,7 +25,7 @@ return new class extends Migration
             $table->integer('sector_id')->nullable()->comment('القطاع المعني');
             $table->date('event_date')->nullable()->comment('تاريخ الحدث');
             $table->time('event_time')->nullable()->comment('توقيت اقامة الحدث');
-            
+
             $table->longText('details')->nullable()->comment('تفاصيل الحدث');
             $table->enum('event_type', [
                 'article', 'tweet', 'video', 'report', 'conference',
@@ -47,6 +47,12 @@ return new class extends Migration
             $table->unsignedBigInteger('position_type_id')->nullable()->comment('نوع الموقف');
             $table->timestamp('publish_date')->nullable()->nullable()->comment('تاريخ النشر');
             $table->text('note')->nullable()->comment('ملاحظات إضافية');
+            $table->boolean('send_to_reviewer')->default(false)->comment('هل تم الارسال للمراجعة؟');
+            $table->unsignedBigInteger('reviewed_by')->nullable()->comment('المستخدم الذي قام بالمراجعة');
+            $table->boolean('send_to_approval')->default(false)->comment('هل تم الارسال للاعتماد؟');
+            $table->unsignedBigInteger('approved_by')->nullable()->comment('المستخدم الذي قام بالتحكيم');
+            $table->boolean('is_published')->default(false)->comment('تم النشر في النظام؟');
+            $table->date('expire_date')->nullable()->comment('تاريخ انتهاء الصلاحية');
 
             $table->timestamps();
             $table->softDeletes();

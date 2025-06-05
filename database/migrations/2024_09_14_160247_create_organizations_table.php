@@ -36,6 +36,14 @@ return new class extends Migration
             $table->date('boss_join')->nullable();
             $table->date('boss_leave')->nullable();
             $table->longText('resources')->nullable();
+            $table->enum('approval_status', ['pending', 'reviewed', 'approved', 'rejected'])->default('pending')->comment('حالة الطلب');
+            $table->boolean('send_to_reviewer')->default(false)->comment('هل تم الارسال للمراجعة؟');
+            $table->unsignedBigInteger('reviewed_by')->nullable()->comment('المستخدم الذي قام بالمراجعة');
+            $table->boolean('send_to_approval')->default(false)->comment('هل تم الارسال للاعتماد؟');
+            $table->unsignedBigInteger('approved_by')->nullable()->comment('المستخدم الذي قام بالتحكيم');
+            $table->boolean('is_published')->default(false)->comment('تم النشر في النظام؟');
+            $table->date('expire_date')->nullable()->comment('تاريخ انتهاء الصلاحية');
+
             $table->timestamps();
             $table->softDeletes();
         });
