@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enum\MaritalStatus;
 use App\Enum\PersonActivity;
 use App\Enum\PersonStatus;
+use App\Filament\Exports\PeopleExporter;
 use App\Filament\Resources\PersonResource\Pages;
 use App\Filament\Resources\PersonResource\RelationManagers\DimensionsRelationManager;
 use App\Filament\Resources\PersonResource\RelationManagers\ExperiencesRelationManager;
@@ -43,6 +44,8 @@ use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Actions\ViewAction;
@@ -374,12 +377,18 @@ class PersonResource extends Resource
                 ViewAction::class::make(),
                 EditAction::class::make(),
             ])
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(PeopleExporter::class)
+            ])
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                 ]),
+                ExportBulkAction::class::make()
+                    ->exporter(PeopleExporter::class)
             ]);
     }
 

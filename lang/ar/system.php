@@ -152,4 +152,45 @@ return [
     'person_position' => 'شرح موقف الشخصيه من القضيه',
     'Duplicate_person_and_issue' => 'لا يُسمح بتكرار الجمع بين الشخص والقضية.',
     'Duplicate_organization_and_issue' => 'لا يُسمح بتكرار الجمع بين المنظمة والقضية.',
+
+    'Your event export has completed and ' => 'تم الانتهاء من التصدير الخاص بك ',
+    'exported'=> ' تم تصديره',
+    'row' => 'صف',
+    'rows' => 'صفوف',
+
+    'export_completed' => 'اكتمل التصدير',
+    'export_failed' => 'فشل التصدير',
+    'export_in_progress' => 'جارٍ التصدير',
+    'export_pending' => 'التصدير معلق',
+    'export_status' => 'حالة التصدير',
+
+    // Common fields
+    'id' => 'المعرف',
+    'created_by' => 'تم الإنشاء بواسطة',
+    'updated_by' => 'تم التحديث بواسطة',
+    'is_published' => 'هل تم النشر',
+    'expire_date' => 'تاريخ انتهاء الصلاحية',
+    'send_to_reviewer' => 'إرسال للمراجعة',
+    'reviewed_by' => 'تمت المراجعة بواسطة',
+    'send_to_approval' => 'إرسال للموافقة',
+    'approved_by' => 'تمت الموافقة بواسطة',
+    'last_login_at' => 'آخر تسجيل دخول',
+
+
+    'job_title' => 'الوظيفة',
+    'registration_purpose' => 'الغرض من إنشاء الحساب',
+    'national_id'=> 'رقم الهوية الوطنية',
+    'identity_document' => 'صورة الهوية الوطنية',
+    'approved_at' => 'تاريخ القبول في النظام',
+
+    'bio'=> 'نبذه تعريفيه',
+    'mobile' => 'رقم الجوال',
+    'photo' => 'صورة شخصية',
+
+    'expire_date_hint' => 'تاريخ انتهاء الصلاحية للحدث أو المقال أو التقرير، إذا كان غير محدد، سيظل العنصر متاحًا حتى يتم حذفه أو تحديثه.',
+
+    'Events Records' => 'سجلات الأحداث',
+    'Events Records need to reviewed' => 'سجلات الأحداث تحتاج إلى مراجعة',
+    'Events Records need to approved' => 'سجلات الأحداث تحتاج إلى موافقة',
+    'Events Records need to published' => 'سجلات الأحداث تحتاج إلى نشر',
 ];

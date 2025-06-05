@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\EventExporter;
 use App\Filament\Resources\EventResource\Pages;
 use App\Models\Event;
 use App\Models\Person;
@@ -415,12 +416,18 @@ class EventResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
+            ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    ->exporter(EventExporter::class)
+            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
+                Tables\Actions\ExportBulkAction::class::make()
+                    ->exporter(EventExporter::class)
             ]);
     }
 

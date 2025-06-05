@@ -68,6 +68,7 @@ class AdminPanelProvider extends PanelProvider
             ])->colors([
                 'primary' => '#066166',
             ])
+            ->databaseNotifications()
             ->darkMode(true)
             ->navigationGroups([
                 NavigationGroup::make()
