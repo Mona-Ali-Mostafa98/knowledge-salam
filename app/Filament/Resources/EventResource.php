@@ -286,6 +286,19 @@ class EventResource extends Resource
                                     ->label(__(self::$langFile . '.tags'))
                                     ->columnSpanFull()
                             ]),
+
+                        Tab::make(__(self::$langFile . '.expire_date'))
+                            ->schema([
+                                DatePicker::make('expire_date')
+                                    ->date()
+                                    ->label(__(self::$langFile . '.expire_date'))
+                                    ->required()
+                                    ->placeholder('YYYY-MM-DD')
+                                    ->default(now())
+                                    ->helperText(__(self::$langFile . '.expire_date_hint')),
+                            ])
+                            ->columns(2),
+
                         ...(
                         auth()->user()?->hasRole('super_admin')
                             ? [
@@ -358,8 +371,8 @@ class EventResource extends Resource
                     ->alignCenter(),
                 Tables\Columns\TextColumn::make('approval_status')
                     ->label(__(self::$langFile . '.approval_status'))
-                    ->sortable()
                     ->formatStateUsing(fn($state) => __(self::$langFile . '.approval_status_options.' . $state))
+                    ->sortable()
                     ->badge()
                     ->color(fn($state) => match ($state) {
                         'approved' => 'success',
@@ -369,7 +382,42 @@ class EventResource extends Resource
                         default => 'secondary',
                     })
                     ->toggleable()
-                    ->alignCenter(),
+                    ->alignCenter()
+                    ->action(function ($record) {
+                        if (auth()->user()?->hasRole('reviewer')) {
+                            if ($record->approval_status === 'pending') {
+                                $record->approval_status = 'reviewed';
+                            } elseif ($record->approval_status === 'reviewed') {
+                                $record->approval_status = 'pending';
+                            }
+                            $record->save();
+                        } elseif (auth()->user()?->hasRole('approval')) {
+                            if ($record->approval_status === 'reviewed') {
+                                $record->approval_status = 'approved';
+                            } elseif ($record->approval_status === 'approved') {
+                                $record->approval_status = 'reviewed';
+                            }
+                            $record->save();
+                        } elseif (auth()->user()?->hasRole('publisher') || auth()->user()?->hasRole('super_admin')) {
+                            if ($record->approval_status === 'approved') {
+                                $record->is_published = !$record->is_published;
+                                $record->save();
+                            }
+                        }
+                    }),
+                Tables\Columns\BooleanColumn::make('is_published')
+                    ->label(__(self::$langFile . '.is_published'))
+                    ->sortable()
+                    ->toggleable()
+                    ->alignCenter()
+                    ->trueIcon('heroicon-o-check')
+                    ->falseIcon('heroicon-o-x-mark')
+                    ->action(function ($record) {
+                        if (auth()->user()?->hasRole('publisher') || auth()->user()?->hasRole('super_admin')) {
+                            $record->is_published = !$record->is_published;
+                            $record->save();
+                        }
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__(self::$langFile . '.created_at'))
                     ->dateTime()
@@ -378,6 +426,20 @@ class EventResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\SelectFilter::make('approval_status')
+                    ->options([
+                        'pending' => __(self::$langFile . '.approval_status_options.pending'),
+                        'reviewed' => __(self::$langFile . '.approval_status_options.reviewed'),
+                        'approved' => __(self::$langFile . '.approval_status_options.approved'),
+                        'rejected' => __(self::$langFile . '.approval_status_options.rejected'),
+                    ])
+                    ->label(__(self::$langFile . '.approval_status')),
+                Tables\Filters\SelectFilter::make('is_published')
+                    ->options([
+                        '1' => __(self::$langFile . '.is_published_yes'),
+                        '0' => __(self::$langFile . '.is_published_no'),
+                    ])
+                    ->label(__(self::$langFile . '.is_published')),
                 Tables\Filters\SelectFilter::make('event_type')
                     ->options([
                         'article' => __(self::$langFile . '.event_type_options.article'),
@@ -404,13 +466,6 @@ class EventResource extends Resource
                         'cancelled' => __(self::$langFile . '.event_status_options.cancelled'),
                     ])
                     ->label(__(self::$langFile . '.event_status')),
-                Tables\Filters\SelectFilter::make('approval_status')
-                    ->options([
-                        'pending' => __(self::$langFile . '.approval_status_options.pending'),
-                        'approved' => __(self::$langFile . '.approval_status_options.approved'),
-                        'rejected' => __(self::$langFile . '.approval_status_options.rejected'),
-                    ])
-                    ->label(__(self::$langFile . '.approval_status')),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

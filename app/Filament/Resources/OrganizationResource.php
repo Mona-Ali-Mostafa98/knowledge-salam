@@ -32,6 +32,7 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -269,7 +270,17 @@ class OrganizationResource extends Resource
 
                                     ]),
                             ]),
-
+                        \Filament\Forms\Components\Tabs\Tab::make(__('system.expire_date'))
+                            ->schema([
+                                DatePicker::make('expire_date')
+                                    ->date()
+                                    ->label(__('system.expire_date'))
+                                    ->required()
+                                    ->placeholder('YYYY-MM-DD')
+                                    ->default(now())
+                                    ->helperText(__('system.expire_date_hint')),
+                            ])
+                            ->columns(2),
                     ])->columns(3),
 
             ]);
@@ -294,6 +305,55 @@ class OrganizationResource extends Resource
                     ->label(__(self::$langFile.'.continent_id'))
                     ->numeric()
                     ->sortable(),
+                TextColumn::make('approval_status')
+                    ->label(__('system.approval_status'))
+                    ->formatStateUsing(fn($state) => __('system.approval_status_options.' . $state))
+                    ->sortable()
+                    ->badge()
+                    ->color(fn($state) => match ($state) {
+                        'approved' => 'success',
+                        'pending' => 'warning',
+                        'reviewed' => 'info',
+                        'rejected' => 'danger',
+                        default => 'secondary',
+                    })
+                    ->toggleable()
+                    ->alignCenter()
+                    ->action(function ($record) {
+                        if (auth()->user()?->hasRole('reviewer')) {
+                            if ($record->approval_status === 'pending') {
+                                $record->approval_status = 'reviewed';
+                            } elseif ($record->approval_status === 'reviewed') {
+                                $record->approval_status = 'pending';
+                            }
+                            $record->save();
+                        } elseif (auth()->user()?->hasRole('approval')) {
+                            if ($record->approval_status === 'reviewed') {
+                                $record->approval_status = 'approved';
+                            } elseif ($record->approval_status === 'approved') {
+                                $record->approval_status = 'reviewed';
+                            }
+                            $record->save();
+                        } elseif (auth()->user()?->hasRole('publisher') || auth()->user()?->hasRole('super_admin')) {
+                            if ($record->approval_status === 'approved') {
+                                $record->is_published = !$record->is_published;
+                                $record->save();
+                            }
+                        }
+                    }),
+                Tables\Columns\BooleanColumn::make('is_published')
+                    ->label(__('system.is_published'))
+                    ->sortable()
+                    ->toggleable()
+                    ->alignCenter()
+                    ->trueIcon('heroicon-o-check')
+                    ->falseIcon('heroicon-o-x-mark')
+                    ->action(function ($record) {
+                        if (auth()->user()?->hasRole('publisher') || auth()->user()?->hasRole('super_admin')) {
+                            $record->is_published = !$record->is_published;
+                            $record->save();
+                        }
+                    }),
                 Tables\Columns\TextColumn::make('country.name')
                     ->label(__(self::$langFile.'.country_id'))
                     ->numeric()
@@ -322,6 +382,20 @@ class OrganizationResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\SelectFilter::make('approval_status')
+                    ->options([
+                        'pending' => __('system.approval_status_options.pending'),
+                        'reviewed' => __('system.approval_status_options.reviewed'),
+                        'approved' => __('system.approval_status_options.approved'),
+                        'rejected' => __('system.approval_status_options.rejected'),
+                    ])
+                    ->label(__('system.approval_status')),
+                Tables\Filters\SelectFilter::make('is_published')
+                    ->options([
+                        '1' => __('system.is_published_yes'),
+                        '0' => __('system.is_published_no'),
+                    ])
+                    ->label(__('system.is_published')),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

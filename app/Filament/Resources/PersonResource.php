@@ -49,6 +49,7 @@ use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Actions\ForceDeleteBulkAction;
 use Filament\Tables\Actions\RestoreBulkAction;
 use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\BooleanColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
@@ -312,7 +313,55 @@ class PersonResource extends Resource
                     ->label(__(self::$langFile.'.religiosity_id'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
-
+                TextColumn::make('approval_status')
+                    ->label(__('system.approval_status'))
+                    ->formatStateUsing(fn($state) => __('system.approval_status_options.' . $state))
+                    ->sortable()
+                    ->badge()
+                    ->color(fn($state) => match ($state) {
+                        'approved' => 'success',
+                        'pending' => 'warning',
+                        'reviewed' => 'info',
+                        'rejected' => 'danger',
+                        default => 'secondary',
+                    })
+                    ->toggleable()
+                    ->alignCenter()
+                    ->action(function ($record) {
+                        if (auth()->user()?->hasRole('reviewer')) {
+                            if ($record->approval_status === 'pending') {
+                                $record->approval_status = 'reviewed';
+                            } elseif ($record->approval_status === 'reviewed') {
+                                $record->approval_status = 'pending';
+                            }
+                            $record->save();
+                        } elseif (auth()->user()?->hasRole('approval')) {
+                            if ($record->approval_status === 'reviewed') {
+                                $record->approval_status = 'approved';
+                            } elseif ($record->approval_status === 'approved') {
+                                $record->approval_status = 'reviewed';
+                            }
+                            $record->save();
+                        } elseif (auth()->user()?->hasRole('publisher') || auth()->user()?->hasRole('super_admin')) {
+                            if ($record->approval_status === 'approved') {
+                                $record->is_published = !$record->is_published;
+                                $record->save();
+                            }
+                        }
+                    }),
+                BooleanColumn::make('is_published')
+                    ->label(__('system.is_published'))
+                    ->sortable()
+                    ->toggleable()
+                    ->alignCenter()
+                    ->trueIcon('heroicon-o-check')
+                    ->falseIcon('heroicon-o-x-mark')
+                    ->action(function ($record) {
+                        if (auth()->user()?->hasRole('publisher') || auth()->user()?->hasRole('super_admin')) {
+                            $record->is_published = !$record->is_published;
+                            $record->save();
+                        }
+                    }),
                 TextColumn::make('birth_country.name')
                     ->label(__(self::$langFile.'.birth_country_id'))
                     ->toggleable()
@@ -345,6 +394,20 @@ class PersonResource extends Resource
             ])
             ->filters([
                 TrashedFilter::make(),
+                SelectFilter::make('approval_status')
+                    ->options([
+                        'pending' => __(self::$langFile . '.approval_status_options.pending'),
+                        'reviewed' => __(self::$langFile . '.approval_status_options.reviewed'),
+                        'approved' => __(self::$langFile . '.approval_status_options.approved'),
+                        'rejected' => __(self::$langFile . '.approval_status_options.rejected'),
+                    ])
+                    ->label(__(self::$langFile . '.approval_status')),
+                SelectFilter::make('is_published')
+                    ->options([
+                        '1' => __(self::$langFile . '.is_published_yes'),
+                        '0' => __(self::$langFile . '.is_published_no'),
+                    ])
+                    ->label(__(self::$langFile . '.is_published')),
                 SelectFilter::make('nationality_id')
                     ->relationship('nationality', 'name')
                     ->label(__(self::$langFile.'.nationality_id')),

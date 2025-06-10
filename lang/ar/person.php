@@ -196,5 +196,13 @@ return [
     "Update Password" => "تحديث كلمة المرور",
     "Updating..." => "جارٍ التحديث...",
     "person.profile.section.title" => "الملف الشخصي",
-    "person.edit_password.section.title" => "تحديث كلمة المرور"
+    "person.edit_password.section.title" => "تحديث كلمة المرور",
+
+    'approval_status' => 'حالة الطلب',
+    'approval_status_options' => [
+    'pending' => 'قيد الانتظار',
+    'reviewed' => 'تمت المراجعة',
+    'approved' => 'موافق عليه',
+    'rejected' => 'مرفوض',
+],
 ];

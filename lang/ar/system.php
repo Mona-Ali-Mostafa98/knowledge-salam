@@ -169,6 +169,8 @@ return [
     'created_by' => 'تم الإنشاء بواسطة',
     'updated_by' => 'تم التحديث بواسطة',
     'is_published' => 'هل تم النشر',
+    'is_published_yes' => 'تم النشر',
+    'is_published_no' => 'لم يتم النشر',
     'expire_date' => 'تاريخ انتهاء الصلاحية',
     'send_to_reviewer' => 'إرسال للمراجعة',
     'reviewed_by' => 'تمت المراجعة بواسطة',
@@ -187,10 +189,25 @@ return [
     'mobile' => 'رقم الجوال',
     'photo' => 'صورة شخصية',
 
-    'expire_date_hint' => 'تاريخ انتهاء الصلاحية للحدث أو المقال أو التقرير، إذا كان غير محدد، سيظل العنصر متاحًا حتى يتم حذفه أو تحديثه.',
+    'expire_date_hint' => 'تاريخ انتهاء الصلاحية يجب ان يكون بعد تاريخ اليوم، إذا كان غير محدد، سيظل العنصر متاحًا حتى يتم حذفه أو تحديثه.',
 
-    'Events Records' => 'سجلات الأحداث',
-    'Events Records need to reviewed' => 'سجلات الأحداث تحتاج إلى مراجعة',
-    'Events Records need to approved' => 'سجلات الأحداث تحتاج إلى موافقة',
-    'Events Records need to published' => 'سجلات الأحداث تحتاج إلى نشر',
+    'Reviewed Records' => 'قوائم المراجعه',
+    'Approval Records' => 'قوائم التحكيم',
+    'Published Records' => 'قوائم التحكيم',
+
+    'Events Records need to reviewed' => 'أحداث قيد المراجعة ',
+    'Events Records need to approved' => 'أحداث قيد التحكيم ',
+    'Events Records need to published' => ' أحداث قيد النشر',
+
+    'Organization Records need to reviewed' => 'منظمات قيد المراجعة ',
+    'Organization Records need to approved' => 'منظمات قيد التحكيم ',
+    'Organization Records need to published' => ' منظمات قيد النشر',
+
+    'People Records need to reviewed' => 'شخصيات قيد المراجعة ',
+    'People Records need to approved' => 'شخصيات قيد التحكيم ',
+    'People Records need to published' => ' شخصيات قيد النشر',
+
+    'User Records need to reviewed' => 'مستخدمين قيد المراجعة ',
+    'User Records need to approved' => 'مستخدمين قيد التحكيم ',
+    'User Records need to published' => ' مستخدمين قيد النشر',
 ];

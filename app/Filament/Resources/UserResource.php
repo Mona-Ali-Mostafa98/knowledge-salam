@@ -135,74 +135,87 @@ class UserResource extends Resource
                     ->label(__(self::$langFile . '.email'))
                     ->sortable()
                     ->searchable(),
-
-                ...(
-                auth()->user()?->hasRole('super_admin')
-                    ? [
-                        Tables\Columns\SelectColumn::make('approval_status')
-                            ->label(__(self::$langFile . '.approval_status'))
-                            ->options([
-                                'pending' => __(self::$langFile . '.approval_status_options.pending'),
-                                'reviewed' => __(self::$langFile . '.approval_status_options.reviewed'),
-                                'approved' => __(self::$langFile . '.approval_status_options.approved'),
-                                'rejected' => __(self::$langFile . '.approval_status_options.rejected'),
-                            ])
-                            ->sortable()
-                            ->toggleable()
-                            ->extraAttributes([
-                                'style' => 'max-width: 9rem !important',
-                                'class' => 'min-w-[2rem] max-w-[4rem] whitespace-nowrap text-sm px-1 py-0.5',
-                            ])
-                            ->alignCenter()
-                            ->afterStateUpdated(function ($record, $state) {
-                                if ($state === 'approved') {
-                                    $record->approved_at = now();
-                                } else {
-                                    $record->approved_at = null;
-                                }
-                                $record->save();
-                                $record->notify(new UserUpdateStatusNotification($record));
-                            })
-                            ->disableOptionWhen(fn(string $value, $record) => $value === 'super_admin' && !$record->hasRole('super_admin'), merge: true),
-                    ]
-                    : [
-                        Tables\Columns\TextColumn::make('approval_status')
-                            ->label(__(self::$langFile . '.approval_status'))
-                            ->formatStateUsing(fn($state) => __(self::$langFile . '.approval_status_options.' . $state))
-                            ->sortable()
-                            ->badge()
-                            ->color(fn($state) => match ($state) {
-                                'approved' => 'success',
-                                'pending' => 'warning',
-                                'reviewed' => 'info',
-                                'rejected' => 'danger',
-                                default => 'secondary',
-                            })
-                            ->toggleable()
-                            ->alignCenter(),
-                    ]
-                ),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label(__(self::$langFile . '.created_at'))
-                    ->dateTime('Y-m-d H:i')
+                Tables\Columns\TextColumn::make('approval_status')
+                    ->label(__(self::$langFile . '.approval_status'))
+                    ->formatStateUsing(fn($state) => __(self::$langFile . '.approval_status_options.' . $state))
                     ->sortable()
-                    ->toggleable(),
+                    ->badge()
+                    ->color(fn($state) => match ($state) {
+                        'approved' => 'success',
+                        'pending' => 'warning',
+                        'reviewed' => 'info',
+                        'rejected' => 'danger',
+                        default => 'secondary',
+                    })
+                    ->toggleable()
+                    ->alignCenter()
+                    ->action(function ($record) {
+                        if (auth()->user()?->hasRole('reviewer')) {
+                            if ($record->approval_status === 'pending') {
+                                $record->approval_status = 'reviewed';
+                            } elseif ($record->approval_status === 'reviewed') {
+                                $record->approval_status = 'pending';
+                            }
+                            $record->save();
+                        } elseif (auth()->user()?->hasRole('approval')) {
+                            if ($record->approval_status === 'reviewed') {
+                                $record->approval_status = 'approved';
+                            } elseif ($record->approval_status === 'approved') {
+                                $record->approval_status = 'reviewed';
+                            }
+                            $record->save();
+                        } elseif (auth()->user()?->hasRole('publisher') || auth()->user()?->hasRole('super_admin')) {
+                            if ($record->approval_status === 'approved') {
+                                $record->is_published = !$record->is_published;
+                                $record->save();
+                            }
+                        }
+                    }),
+                Tables\Columns\BooleanColumn::make('is_published')
+                    ->label(__(self::$langFile . '.is_published'))
+                    ->sortable()
+                    ->toggleable()
+                    ->alignCenter()
+                    ->trueIcon('heroicon-o-check')
+                    ->falseIcon('heroicon-o-x-mark')
+                    ->action(function ($record) {
+                        if (auth()->user()?->hasRole('publisher') || auth()->user()?->hasRole('super_admin')) {
+                            $record->is_published = !$record->is_published;
+                            $record->save();
+                        }
+                    }),
                 Tables\Columns\TextColumn::make('approved_at')
                     ->label(__('person.approved_at'))
                     ->dateTime('Y-m-d H:i')
                     ->sortable()
                     ->toggleable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label(__(self::$langFile . '.created_at'))
+                    ->dateTime('Y-m-d H:i')
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\TagsColumn::make('roles.name')
+                    ->label(__(self::$langFile . '.roles'))
+                    ->separator(',')
+                    ->badge()
+                    ->toggleable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
                 Tables\Filters\SelectFilter::make('approval_status')
-                    ->label(__(self::$langFile . '.approval_status'))
                     ->options([
                         'pending' => __(self::$langFile . '.approval_status_options.pending'),
                         'reviewed' => __(self::$langFile . '.approval_status_options.reviewed'),
                         'approved' => __(self::$langFile . '.approval_status_options.approved'),
                         'rejected' => __(self::$langFile . '.approval_status_options.rejected'),
-                    ]),
+                    ])
+                    ->label(__(self::$langFile . '.approval_status')),
+                Tables\Filters\SelectFilter::make('is_published')
+                    ->options([
+                        '1' => __(self::$langFile . '.is_published_yes'),
+                        '0' => __(self::$langFile . '.is_published_no'),
+                    ])
+                    ->label(__(self::$langFile . '.is_published')),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
