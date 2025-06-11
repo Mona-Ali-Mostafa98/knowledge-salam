@@ -13,7 +13,7 @@ class ReviewedEventResource extends EventResource
     protected static ?string $navigationIcon = 'heroicon-o-clock';
     protected static ?string $model = Event::class;
 
-    protected static ?string $navigationGroup = 'Approvals'; // Or any section you want
+    protected static ?string $navigationGroup = 'Reviewed Records';
     protected static ?string $label = 'Reviewed Event';
     protected static ?string $pluralLabel = 'Reviewed Events';
 

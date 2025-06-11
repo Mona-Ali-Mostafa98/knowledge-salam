@@ -15,7 +15,7 @@ class PendingUserResource extends UserResource
     protected static ?string $navigationIcon = 'heroicon-o-clock';
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationGroup = 'Approvals'; // Or any section you want
+    protected static ?string $navigationGroup = 'Pending Records';
     protected static ?string $label = 'Pending User';
     protected static ?string $pluralLabel = 'Pending Users';
 

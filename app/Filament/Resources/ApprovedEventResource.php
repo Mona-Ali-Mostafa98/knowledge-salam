@@ -15,7 +15,7 @@ class ApprovedEventResource extends EventResource
     protected static ?string $navigationIcon = 'heroicon-o-clock';
     protected static ?string $model = Event::class;
 
-    protected static ?string $navigationGroup = 'Approvals'; // Or any section you want
+    protected static ?string $navigationGroup = 'Approved Records';
     protected static ?string $label = 'Approved Event';
     protected static ?string $pluralLabel = 'Approved Events';
 

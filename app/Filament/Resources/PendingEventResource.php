@@ -15,7 +15,7 @@ class PendingEventResource extends EventResource
     protected static ?string $navigationIcon = 'heroicon-o-clock';
     protected static ?string $model = Event::class;
 
-    protected static ?string $navigationGroup = 'Approvals'; // Or any section you want
+    protected static ?string $navigationGroup = 'Pending Records';
     protected static ?string $label = 'Pending Event';
     protected static ?string $pluralLabel = 'Pending Events';
 

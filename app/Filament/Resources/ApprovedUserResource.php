@@ -15,7 +15,7 @@ class ApprovedUserResource extends UserResource
     protected static ?string $navigationIcon = 'heroicon-o-clock';
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationGroup = 'Approvals'; // Or any section you want
+    protected static ?string $navigationGroup = 'Approved Records';
     protected static ?string $label = 'Approved User';
     protected static ?string $pluralLabel = 'Approved Users';
 

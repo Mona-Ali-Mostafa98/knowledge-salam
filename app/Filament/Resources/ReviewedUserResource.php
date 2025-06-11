@@ -13,7 +13,7 @@ class ReviewedUserResource extends UserResource
     protected static ?string $navigationIcon = 'heroicon-o-clock';
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationGroup = 'Approvals'; // Or any section you want
+    protected static ?string $navigationGroup = 'Reviewed Records';
     protected static ?string $label = 'Reviewed User';
     protected static ?string $pluralLabel = 'Reviewed Users';
 
