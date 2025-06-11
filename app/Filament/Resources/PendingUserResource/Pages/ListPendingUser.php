@@ -3,9 +3,10 @@
 namespace App\Filament\Resources\PendingUserResource\Pages;
 
 use App\Filament\Resources\PendingUserResource;
-use Filament\Resources\Pages\ViewRecord;
+use Filament\Actions;
+use Filament\Resources\Pages\ListRecords;
 
-class ViewPendingUser extends ViewRecord
+class ListPendingUser extends ListRecords
 {
     protected static string $resource = PendingUserResource::class;
 }

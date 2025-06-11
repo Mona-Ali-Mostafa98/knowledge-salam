@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PendingUserResource\Pages\EditPendingUser;
-use App\Filament\Resources\PendingUserResource\Pages\ListPendingUsers;
+use App\Filament\Resources\PendingUserResource\Pages\ListPendingUser;
 use App\Filament\Resources\PendingUserResource\Pages\ViewPendingUser;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,7 +29,7 @@ class PendingUserResource extends UserResource
     public static function getPages(): array
     {
         return [
-            'index' => ListPendingUsers::route('/'),
+            'index' => ListPendingUser::route('/'),
             'view' => ViewPendingUser::route('/{record}'),
             'edit' => EditPendingUser::route('/{record}/edit'),
         ];

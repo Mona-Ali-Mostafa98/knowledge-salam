@@ -39,7 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->registration(CustomRegister::class)
             ->profile()
             ->userMenuItems([
-                'profile' => MenuItem::make()->url(fn (): string => EditProfile::getUrl())
+                'profile' => MenuItem::make()->url(fn(): string => EditProfile::getUrl())
             ])
             ->colors([
                 'primary' => Color::Amber,
@@ -92,7 +92,7 @@ class AdminPanelProvider extends PanelProvider
 
                         $user?->hasRole(['reviewer'])
                             ? NavigationItem::make(__('system.Organization Records need to reviewed'))
-                            ->url('/admin/organizations?tableFilters[approval_status][value]=pending')
+                            ->url('/admin/pending-peoples')
                             ->icon('heroicon-o-eye')
                             ->activeIcon('heroicon-s-eye')
                             ->group(__('system.Reviewed Records'))
@@ -101,7 +101,7 @@ class AdminPanelProvider extends PanelProvider
 
                         $user?->hasRole(['reviewer'])
                             ? NavigationItem::make(__('system.People Records need to reviewed'))
-                            ->url('/admin/people?tableFilters[approval_status][value]=pending')
+                            ->url('/admin/pending-peoples')
                             ->icon('heroicon-o-eye')
                             ->activeIcon('heroicon-s-eye')
                             ->group(__('system.Reviewed Records'))
@@ -119,7 +119,7 @@ class AdminPanelProvider extends PanelProvider
 
                         //******************************************************************************
                         $user?->hasRole(['approval'])
-                        ? NavigationItem::make(__('system.Events Records need to approved'))
+                            ? NavigationItem::make(__('system.Events Records need to approved'))
                             ->url('/admin/reviewed-events')
                             ->icon('heroicon-o-check-circle')
                             ->activeIcon('heroicon-s-check-circle')
@@ -129,7 +129,7 @@ class AdminPanelProvider extends PanelProvider
 
                         $user?->hasRole(['approval'])
                             ? NavigationItem::make(__('system.Organization Records need to approved'))
-                            ->url('/admin/organizations?tableFilters[approval_status][value]=reviewed')
+                            ->url('/admin/reviewed-organizations')
                             ->icon('heroicon-o-check-circle')
                             ->activeIcon('heroicon-s-check-circle')
                             ->group(__('system.Approval Records'))
@@ -138,7 +138,7 @@ class AdminPanelProvider extends PanelProvider
 
                         $user?->hasRole(['approval'])
                             ? NavigationItem::make(__('system.People Records need to approved'))
-                            ->url('/admin/people?tableFilters[approval_status][value]=reviewed')
+                            ->url('/admin/reviewed-peoples')
                             ->icon('heroicon-o-check-circle')
                             ->activeIcon('heroicon-s-check-circle')
                             ->group(__('system.Approval Records'))
@@ -156,7 +156,7 @@ class AdminPanelProvider extends PanelProvider
 
                         //******************************************************************************
                         $user?->hasAnyRole(['publisher', 'super_admin'])
-                            ? NavigationItem::make(__('system.Events Records need to published'))
+                            ? NavigationItem::make(label: __('system.Events Records need to published'))
                             ->url('/admin/approved-events')
                             ->icon('heroicon-o-arrow-up-tray')
                             ->activeIcon('heroicon-s-arrow-up-tray')
@@ -166,7 +166,7 @@ class AdminPanelProvider extends PanelProvider
 
                         $user?->hasAnyRole(['publisher', 'super_admin'])
                             ? NavigationItem::make(__('system.Organization Records need to published'))
-                            ->url('/admin/organizations?tableFilters[approval_status][value]=approved&tableFilters[is_published][value]=0')
+                            ->url('/admin/approved-organizations')
                             ->icon('heroicon-o-arrow-up-tray')
                             ->activeIcon('heroicon-s-arrow-up-tray')
                             ->group(__('system.Published Records'))
@@ -175,7 +175,7 @@ class AdminPanelProvider extends PanelProvider
 
                         $user?->hasAnyRole(['publisher', 'super_admin'])
                             ? NavigationItem::make(__('system.People Records need to published'))
-                            ->url('/admin/people?tableFilters[approval_status][value]=approved&tableFilters[is_published][value]=0')
+                            ->url('/admin/approved-peoples')
                             ->icon('heroicon-o-arrow-up-tray')
                             ->activeIcon('heroicon-s-arrow-up-tray')
                             ->group(__('system.Published Records'))

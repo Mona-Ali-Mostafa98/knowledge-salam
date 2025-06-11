@@ -2,22 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PendingEventResource\Pages\EditPendingEvent;
-use App\Filament\Resources\PendingEventResource\Pages\ListPendingEvent;
-use App\Filament\Resources\PendingEventResource\Pages\ViewPendingEvent;
-use App\Models\Event;
+use App\Filament\Resources\PendingPeopleResource\Pages\EditPendingPeople;
+use App\Filament\Resources\PendingPeopleResource\Pages\ListPendingPeople;
+use App\Filament\Resources\PendingPeopleResource\Pages\ViewPendingPeople;
+use App\Models\Person;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 
-class PendingEventResource extends EventResource
+class PendingPeopleResource extends PersonResource
 {
     protected static ?string $navigationIcon = 'heroicon-o-clock';
-    protected static ?string $model = Event::class;
+    protected static ?string $model = Person::class;
 
     protected static ?string $navigationGroup = 'Pending Records';
-    protected static ?string $label = 'Pending Event';
-    protected static ?string $pluralLabel = 'Pending Events';
+    protected static ?string $label = 'Pending People';
+    protected static ?string $pluralLabel = 'Pending Peoples';
 
     public static function getEloquentQuery(): Builder
     {
@@ -29,9 +29,9 @@ class PendingEventResource extends EventResource
     public static function getPages(): array
     {
         return [
-            'index' => ListPendingEvent::route('/'),
-            'view' => ViewPendingEvent::route('/{record}'),
-            'edit' => EditPendingEvent::route('/{record}/edit'),
+            'index' => ListPendingPeople::route('/'),
+            'view' => ViewPendingPeople::route('/{record}'),
+            'edit' => EditPendingPeople::route('/{record}/edit'),
         ];
     }
 

@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\PendingEventResource\Pages;
 
 use App\Filament\Resources\PendingEventResource;
-//use App\Notifications\EventUpdateStatusNotification;
+use App\Notifications\EventUpdateStatusNotification;
 use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
@@ -41,7 +41,7 @@ class EditPendingEvent extends EditRecord
     {
         if ($this->record->wasChanged('approval_status')) {
             // Log::info('Event approved: ' . $this->record->email);
-//            $this->record->notify(new EventUpdateStatusNotification($this->record));
+            $this->record->notify(new EventUpdateStatusNotification($this->record));
         }
     }
 }

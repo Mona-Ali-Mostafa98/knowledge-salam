@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\PendingUserResource\Pages;
 
 use App\Filament\Resources\PendingUserResource;
-use App\Notifications\UserUpdateStatusNotification;
+//use App\Notifications\UserUpdateStatusNotification;
 use Filament\Actions;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
@@ -41,7 +41,7 @@ class EditPendingUser extends EditRecord
     {
         if ($this->record->wasChanged('approval_status')) {
             // Log::info('User approved: ' . $this->record->email);
-            $this->record->notify(new UserUpdateStatusNotification($this->record));
+//            $this->record->notify(new UserUpdateStatusNotification($this->record));
         }
     }
 }
