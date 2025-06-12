@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReligionResource\Pages;
 use App\Models\Religion;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -108,5 +109,12 @@ class ReligionResource extends Resource
     public static function getLabel(): ?string
     {
         return __(self::$langFile.'.religion');
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = Filament::auth()->user();
+
+        return $user && method_exists($user, 'hasRole') && $user->hasRole('super_admin');
     }
 }

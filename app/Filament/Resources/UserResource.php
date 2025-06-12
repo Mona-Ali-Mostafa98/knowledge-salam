@@ -6,6 +6,7 @@ use App\Filament\Exports\UserExporter;
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
 use App\Notifications\UserUpdateStatusNotification;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -279,5 +280,12 @@ class UserResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = Filament::auth()->user();
+
+        return $user && method_exists($user, 'hasRole') && $user->hasRole('super_admin');
     }
 }

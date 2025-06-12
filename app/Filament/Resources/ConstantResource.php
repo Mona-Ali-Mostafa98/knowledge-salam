@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enum\ConstantsTypes;
 use App\Filament\Resources\ConstantResource\Pages;
 use App\Models\Constant;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -123,5 +124,12 @@ class ConstantResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = Filament::auth()->user();
+
+        return $user && method_exists($user, 'hasRole') && $user->hasRole('super_admin');
     }
 }

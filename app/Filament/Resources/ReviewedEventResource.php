@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\ReviewedEventResource\Pages\ListReviewedEvent;
+use App\Filament\Resources\ReviewedEventResource\Pages\ViewReviewedEvent;
 use App\Models\Event;
-
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -13,9 +15,21 @@ class ReviewedEventResource extends EventResource
     protected static ?string $navigationIcon = 'heroicon-o-clock';
     protected static ?string $model = Event::class;
 
-    protected static ?string $navigationGroup = 'Reviewed Records';
-    protected static ?string $label = 'Reviewed Event';
-    protected static ?string $pluralLabel = 'Reviewed Events';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('system.Reviewed Records');
+    }
+
+    public static function getPluralLabel(): ?string
+    {
+        return __('system.Events Records need to reviewed');
+    }
+
+    public static function getLabel(): ?string
+    {
+        return  __('system.Events Records need to reviewed');
+    }
+
 
     public static function getEloquentQuery(): Builder
     {
@@ -27,14 +41,20 @@ class ReviewedEventResource extends EventResource
     public static function getPages(): array
     {
         return [
-            'index' => \App\Filament\Resources\ReviewedEventResource\Pages\ListReviewedEvent::route('/'),
-            'view' => \App\Filament\Resources\ReviewedEventResource\Pages\ViewReviewedEvent::route('/{record}'),
-            'edit' => \App\Filament\Resources\ReviewedEventResource\Pages\EditReviewedEvent::route('/{record}/edit'),
+            'index' => ListReviewedEvent::route('/'),
+            'view' => ViewReviewedEvent::route('/{record}'),
         ];
     }
 
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::where('approval_status', 'reviewed')->count();
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = Filament::auth()->user();
+
+        return $user && method_exists($user, 'hasRole') && $user->hasRole('approval');
     }
 }

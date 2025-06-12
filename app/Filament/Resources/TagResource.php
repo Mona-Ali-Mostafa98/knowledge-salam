@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TagResource\Pages;
 use App\Models\Tag;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -100,5 +101,12 @@ class TagResource extends Resource
     public static function getLabel(): ?string
     {
         return __(self::$langFile.'.tag');
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = Filament::auth()->user();
+
+        return $user && method_exists($user, 'hasRole') && $user->hasRole('super_admin');
     }
 }

@@ -7,6 +7,7 @@ use App\Filament\Resources\OrganizationResource\Pages;
 use App\Filament\Resources\OrganizationResource\RelationManagers\LogsRelationManager;
 use App\Filament\Resources\OrganizationResource\RelationManagers\PeopleRelationManager;
 use App\Models\Organization;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
@@ -651,5 +652,12 @@ class OrganizationResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = Filament::auth()->user();
+
+        return $user && method_exists($user, 'hasRole') && $user->hasRole('super_admin');
     }
 }

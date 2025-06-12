@@ -6,6 +6,7 @@ use App\Filament\Resources\SaudiArticlesResource\Pages;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\SaudiArticles;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -257,5 +258,12 @@ class SaudiArticlesResource extends Resource
     public static function getLabel(): ?string
     {
         return __(self::$langFile.'.saudi_article');
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = Filament::auth()->user();
+
+        return $user && method_exists($user, 'hasRole') && $user->hasRole('super_admin');
     }
 }

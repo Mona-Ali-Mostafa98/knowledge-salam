@@ -191,23 +191,23 @@ return [
 
     'expire_date_hint' => 'تاريخ انتهاء الصلاحية يجب ان يكون بعد تاريخ اليوم، إذا كان غير محدد، سيظل العنصر متاحًا حتى يتم حذفه أو تحديثه.',
 
-    'Reviewed Records' => 'قوائم المراجعه',
-    'Approval Records' => 'قوائم التحكيم',
-    'Published Records' => 'قوائم التحكيم',
+    'Pending Records' => 'قوائم المراجعه',
+    'Reviewed Records' => 'قوائم التحكيم',
+    'Approval Records' => 'قوائم النشر',
 
-    'Events Records need to reviewed' => 'أحداث قيد المراجعة ',
-    'Events Records need to approved' => 'أحداث قيد التحكيم ',
-    'Events Records need to published' => ' أحداث قيد النشر',
+    'Events Records need to pending' => 'أحداث قيد المراجعة ',
+    'Events Records need to reviewed' => 'أحداث قيد التحكيم ',
+    'Events Records need to approved' => ' أحداث قيد النشر',
 
-    'Organization Records need to reviewed' => 'منظمات قيد المراجعة ',
-    'Organization Records need to approved' => 'منظمات قيد التحكيم ',
-    'Organization Records need to published' => ' منظمات قيد النشر',
+    'Organizations Records need to pending' => 'منظمات قيد المراجعة ',
+    'Organizations Records need to reviewed' => 'منظمات قيد التحكيم ',
+    'Organizations Records need to approved' => ' منظمات قيد النشر',
 
-    'People Records need to reviewed' => 'شخصيات قيد المراجعة ',
-    'People Records need to approved' => 'شخصيات قيد التحكيم ',
-    'People Records need to published' => ' شخصيات قيد النشر',
+    'People Records need to pending' => 'شخصيات قيد المراجعة ',
+    'People Records need to reviewed' => 'شخصيات قيد التحكيم ',
+    'People Records need to approved' => ' شخصيات قيد النشر',
 
-    'User Records need to reviewed' => 'مستخدمين قيد المراجعة ',
-    'User Records need to approved' => 'مستخدمين قيد التحكيم ',
-    'User Records need to published' => ' مستخدمين قيد النشر',
+    'Users Records need to pending' => 'مستخدمين قيد المراجعة ',
+    'Users Records need to reviewed' => 'مستخدمين قيد التحكيم ',
+    'Users Records need to approved' => ' مستخدمين قيد النشر',
 ];

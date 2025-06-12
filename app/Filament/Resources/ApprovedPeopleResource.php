@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ApprovedPeopleResource\Pages\EditApprovedPeople;
 use App\Filament\Resources\ApprovedPeopleResource\Pages\ListApprovedPeople;
 use App\Filament\Resources\ApprovedPeopleResource\Pages\ViewApprovedPeople;
 use App\Models\Person;
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -15,9 +15,20 @@ class ApprovedPeopleResource extends PersonResource
     protected static ?string $navigationIcon = 'heroicon-o-clock';
     protected static ?string $model = Person::class;
 
-    protected static ?string $navigationGroup = 'Approved Records';
-    protected static ?string $label = 'Approved People';
-    protected static ?string $pluralLabel = 'Approved Peoples';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('system.Approval Records');
+    }
+
+    public static function getPluralLabel(): ?string
+    {
+        return __('system.People Records need to approved');
+    }
+
+    public static function getLabel(): ?string
+    {
+        return  __('system.People Records need to approved');
+    }
 
     public static function getEloquentQuery(): Builder
     {
@@ -31,12 +42,18 @@ class ApprovedPeopleResource extends PersonResource
         return [
             'index' => ListApprovedPeople::route('/'),
             'view' => ViewApprovedPeople::route('/{record}'),
-            'edit' => EditApprovedPeople::route('/{record}/edit'),
         ];
     }
 
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::where('approval_status', 'approved')->count();
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = Filament::auth()->user();
+
+        return $user && method_exists($user, 'hasRole') && $user->hasRole(['publisher', 'super_admin']);
     }
 }

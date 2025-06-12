@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\ReviewedPeopleResource\Pages\ListReviewedPeople;
+use App\Filament\Resources\ReviewedPeopleResource\Pages\ViewReviewedPeople;
 use App\Models\Person;
-
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -13,9 +15,21 @@ class ReviewedPeopleResource extends PersonResource
     protected static ?string $navigationIcon = 'heroicon-o-clock';
     protected static ?string $model = Person::class;
 
-    protected static ?string $navigationGroup = 'Reviewed Records';
-    protected static ?string $label = 'Reviewed People';
-    protected static ?string $pluralLabel = 'Reviewed Peoples';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('system.Reviewed Records');
+    }
+
+    public static function getPluralLabel(): ?string
+    {
+        return __('system.People Records need to reviewed');
+    }
+
+    public static function getLabel(): ?string
+    {
+        return  __('system.People Records need to reviewed');
+    }
+
 
     public static function getEloquentQuery(): Builder
     {
@@ -27,14 +41,20 @@ class ReviewedPeopleResource extends PersonResource
     public static function getPages(): array
     {
         return [
-            'index' => \App\Filament\Resources\ReviewedPeopleResource\Pages\ListReviewedPeople::route('/'),
-            'view' => \App\Filament\Resources\ReviewedPeopleResource\Pages\ViewReviewedPeople::route('/{record}'),
-            'edit' => \App\Filament\Resources\ReviewedPeopleResource\Pages\EditReviewedPeople::route('/{record}/edit'),
+            'index' => ListReviewedPeople::route('/'),
+            'view' => ViewReviewedPeople::route('/{record}'),
         ];
     }
 
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::where('approval_status', 'reviewed')->count();
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = Filament::auth()->user();
+
+        return $user && method_exists($user, 'hasRole') && $user->hasRole('approval');
     }
 }
