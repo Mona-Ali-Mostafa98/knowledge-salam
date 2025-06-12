@@ -123,10 +123,6 @@ class Person extends Model
         return $this->hasMany(PeopleExperience::class, 'person_id', 'id');
     }
 
-    public function videos(): HasMany
-    {
-        return $this->hasMany(Videos::class, 'person_id', 'id');
-    }
 
     public function articles(): HasMany
     {

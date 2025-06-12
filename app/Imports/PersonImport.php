@@ -14,7 +14,6 @@ use App\Models\PeopleSocial;
 use App\Models\Person;
 use App\Models\Religion;
 use App\Models\Sect;
-use App\Models\Videos;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 
@@ -581,16 +580,6 @@ class PersonImport implements ToModel
                     $tags = implode(',', $tags);
                 }
 
-                Videos::create([
-                    'person_id' => $person->id,
-                    'title' => $row[86] ?? null,
-                    'video_link' => $row[87] ?? null,
-                    'publish_date' => $publish_date,
-                    'details' => $row[89] ?? null,
-                    'direction_id' => $direction_id,
-                    'tags' => $tags,
-                    'position_type_id' => $position_type_id,
-                ]);
             }
 
             if (isset($row[94]) && ! empty($row[94]) && isset($row[93]) && ! empty($row[93])) {
@@ -649,16 +638,6 @@ class PersonImport implements ToModel
                     $tags = implode(',', $tags);
                 }
 
-                Videos::create([
-                    'person_id' => $person->id,
-                    'title' => $row[93] ?? null,
-                    'video_link' => $row[94] ?? null,
-                    'publish_date' => $publish_date,
-                    'details' => $row[96] ?? null,
-                    'direction_id' => $direction_id,
-                    'tags' => $tags,
-                    'position_type_id' => $position_type_id,
-                ]);
             }
 
             if (isset($row[101]) && ! empty($row[101]) && isset($row[100]) && ! empty($row[100])) {
@@ -716,17 +695,6 @@ class PersonImport implements ToModel
                     }
                     $tags = implode(',', $tags);
                 }
-
-                Videos::create([
-                    'person_id' => $person->id,
-                    'title' => $row[100] ?? null,
-                    'video_link' => $row[101] ?? null,
-                    'publish_date' => $publish_date,
-                    'details' => $row[103] ?? null,
-                    'direction_id' => $direction_id,
-                    'tags' => $tags,
-                    'position_type_id' => $position_type_id,
-                ]);
             }
 
         }

@@ -7,7 +7,6 @@ use App\Models\Issues;
 use App\Models\Organization;
 use App\Models\Person;
 use App\Models\SaudiArticles;
-use App\Models\Videos;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -30,9 +29,6 @@ class StatsOverview extends BaseWidget
                 ->chart([9, 6, 18, 3, 15, 7, 20])
                 ->color('success'),
             Stat::make(__('system.issues'), Issues::count())
-                ->chart([9, 6, 18, 3, 15, 7, 20])
-                ->color('success'),
-            Stat::make(__('system.videos'), Videos::count())
                 ->chart([9, 6, 18, 3, 15, 7, 20])
                 ->color('success'),
         ];
