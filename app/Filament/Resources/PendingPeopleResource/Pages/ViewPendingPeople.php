@@ -8,4 +8,8 @@ use Filament\Resources\Pages\ViewRecord;
 class ViewPendingPeople extends ViewRecord
 {
     protected static string $resource = PendingPeopleResource::class;
+    protected function getHeaderActions(): array
+    {
+        return [];
+    }
 }

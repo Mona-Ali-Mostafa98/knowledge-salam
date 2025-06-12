@@ -6,6 +6,7 @@ use App\Filament\Resources\ReviewedUserResource\Pages\ListReviewedUser;
 use App\Filament\Resources\ReviewedUserResource\Pages\ViewReviewedUser;
 use App\Models\User;
 use Filament\Facades\Filament;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -56,5 +57,13 @@ class ReviewedUserResource extends UserResource
         $user = Filament::auth()->user();
 
         return $user && method_exists($user, 'hasRole') && $user->hasRole('approval');
+    }
+
+    public static function table(Table $table): Table
+    {
+        return parent::table($table)
+            ->actions([
+                \Filament\Tables\Actions\ViewAction::class::make(),
+            ]);
     }
 }

@@ -8,4 +8,8 @@ use Filament\Resources\Pages\ViewRecord;
 class ViewApprovedUser extends ViewRecord
 {
     protected static string $resource = ApprovedUserResource::class;
+    protected function getHeaderActions(): array
+    {
+        return [];
+    }
 }

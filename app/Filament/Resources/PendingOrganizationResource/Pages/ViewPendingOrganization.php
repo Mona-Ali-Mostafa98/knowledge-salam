@@ -8,4 +8,9 @@ use Filament\Resources\Pages\ViewRecord;
 class ViewPendingOrganization extends ViewRecord
 {
     protected static string $resource = PendingOrganizationResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [];
+    }
 }

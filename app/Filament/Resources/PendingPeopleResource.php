@@ -6,6 +6,7 @@ use App\Filament\Resources\PendingPeopleResource\Pages\ListPendingPeople;
 use App\Filament\Resources\PendingPeopleResource\Pages\ViewPendingPeople;
 use App\Models\Person;
 use Filament\Facades\Filament;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -55,5 +56,13 @@ class PendingPeopleResource extends PersonResource
         $user = Filament::auth()->user();
 
         return $user && method_exists($user, 'hasRole') && $user->hasRole('reviewer');
+    }
+
+    public static function table(Table $table): Table
+    {
+        return parent::table($table)
+            ->actions([
+                \Filament\Tables\Actions\ViewAction::class::make(),
+            ]);
     }
 }

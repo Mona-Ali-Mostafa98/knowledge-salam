@@ -8,4 +8,9 @@ use Filament\Resources\Pages\ViewRecord;
 class ViewPendingEvent extends ViewRecord
 {
     protected static string $resource = PendingEventResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [];
+    }
 }

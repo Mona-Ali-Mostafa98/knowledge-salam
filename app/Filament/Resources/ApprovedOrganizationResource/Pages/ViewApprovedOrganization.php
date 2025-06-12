@@ -8,4 +8,8 @@ use Filament\Resources\Pages\ViewRecord;
 class ViewApprovedOrganization extends ViewRecord
 {
     protected static string $resource = ApprovedOrganizationResource::class;
+    protected function getHeaderActions(): array
+    {
+        return [];
+    }
 }

@@ -6,6 +6,7 @@ use App\Filament\Resources\ApprovedPeopleResource\Pages\ListApprovedPeople;
 use App\Filament\Resources\ApprovedPeopleResource\Pages\ViewApprovedPeople;
 use App\Models\Person;
 use Filament\Facades\Filament;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -55,5 +56,13 @@ class ApprovedPeopleResource extends PersonResource
         $user = Filament::auth()->user();
 
         return $user && method_exists($user, 'hasRole') && $user->hasRole(['publisher', 'super_admin']);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return parent::table($table)
+            ->actions([
+                \Filament\Tables\Actions\ViewAction::class::make(),
+            ]);
     }
 }

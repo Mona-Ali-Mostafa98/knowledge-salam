@@ -6,6 +6,7 @@ use App\Filament\Resources\ApprovedOrganizationResource\Pages\ListApprovedOrgani
 use App\Filament\Resources\ApprovedOrganizationResource\Pages\ViewApprovedOrganization;
 use App\Models\Organization;
 use Filament\Facades\Filament;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -55,5 +56,13 @@ class ApprovedOrganizationResource extends OrganizationResource
         $user = Filament::auth()->user();
 
         return $user && method_exists($user, 'hasRole') && $user->hasRole(['publisher', 'super_admin']);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return parent::table($table)
+            ->actions([
+                \Filament\Tables\Actions\ViewAction::class::make(),
+            ]);
     }
 }

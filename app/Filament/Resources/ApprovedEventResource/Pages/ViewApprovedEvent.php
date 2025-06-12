@@ -8,4 +8,8 @@ use Filament\Resources\Pages\ViewRecord;
 class ViewApprovedEvent extends ViewRecord
 {
     protected static string $resource = ApprovedEventResource::class;
+    protected function getHeaderActions(): array
+    {
+        return [];
+    }
 }
