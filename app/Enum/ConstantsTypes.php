@@ -33,7 +33,7 @@ enum ConstantsTypes: string implements HasLabel
     case PositionsTypes = 'positions_types';
     case ArticlesTypes = 'articles_types';
     case SourceLocations = 'source_locations';
-    case IssuesNames = 'issues_names';
+    case IssuesTypes = 'issues_types';
     case Achievements = 'achievements';
     case PoliticalPositions = 'political_positions';
     case MoneyResources = 'money_resources';

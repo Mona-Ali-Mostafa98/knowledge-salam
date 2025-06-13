@@ -151,7 +151,7 @@ class EventResource extends Resource
                                             ->label(__(self::$langFile . '.event_peoples'))
                                             ->searchable(['first_name', 'mid_name', 'last_name'])
                                             ->getOptionLabelFromRecordUsing(
-                                                fn(Person $record) => "{$record->first_name} {$record->mid_name} {$record->last_name}"
+                                                fn(Person $record) => trim("{$record->first_name} {$record->mid_name} {$record->last_name}") ?: '-'
                                             )
                                             ->relationship('person', 'first_name') // binds to `person()` relation in pivot model
                                             ->required(),
@@ -160,7 +160,7 @@ class EventResource extends Resource
                                             ->label(__(self::$langFile . '.event_issues'))
                                             ->searchable()
                                             ->getOptionLabelFromRecordUsing(
-                                                fn(Issues $record) => $record->title
+                                                fn(Issues $record) => $record->title ?? '-'
                                             )
                                             ->relationship('issue', 'title') // binds to `issue()` relation in pivot model
                                             ->required()
@@ -223,7 +223,7 @@ class EventResource extends Resource
                                             ->label(__(self::$langFile . '.event_issues'))
                                             ->searchable()
                                             ->getOptionLabelFromRecordUsing(
-                                                fn(Issues $record) => $record->title
+                                                fn(Issues $record) => $record->title ?? '-'
                                             )
                                             ->relationship('issue', 'title')
                                             ->required()

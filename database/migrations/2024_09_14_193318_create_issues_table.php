@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('issues', function (Blueprint $table) {
             $table->id();
-            $table->text('title');
-            $table->longText('direction')->nullable();
-            $table->text('note')->nullable();
-            $table->integer('person_id')->nullable();
-            $table->integer('organization_id')->nullable();
-            $table->integer('issue_name_id')->nullable();
+            $table->string('issue_name')->comment('اسم القضية');
+            $table->unsignedBigInteger('issue_type')->comment('نوع القضية');
+            $table->unsignedBigInteger('issue_field')->comment('مجال القضية');
+            $table->text('issue_description')->nullable()->comment('شرح القضية');
+            $table->text('saudi_direction')->nullable()->comment('موقف المملكة من القضية');
+            $table->text('official_response')->nullable()->comment('الرد الرسمي حول القضية');
             $table->timestamps();
             $table->softDeletes();
         });

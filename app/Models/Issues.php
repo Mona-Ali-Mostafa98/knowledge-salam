@@ -7,27 +7,27 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Translatable\HasTranslations;
 
 class Issues extends Model
 {
     use HasFactory;
+    use HasTranslations;
     use SoftDeletes;
 
     protected $guarded = [];
 
-    public function person(): BelongsTo
+    public $translatable = ['issue_name'];
+
+    public function issueType(): BelongsTo
     {
-        return $this->belongsTo(Person::class, 'person_id', 'id');
+        return $this->belongsTo(Constant::class, 'issue_type', 'id')
+            ->where('type', ConstantsTypes::IssuesTypes->value);
     }
 
-    public function organization(): BelongsTo
+    public function issueField(): BelongsTo
     {
-        return $this->belongsTo(Organization::class, 'organization_id', 'id');
-    }
-
-    public function issue_name(): BelongsTo
-    {
-        return $this->belongsTo(Constant::class, 'issue_name_id', 'id')
-            ->where('type', ConstantsTypes::IssuesNames->value);
+        return $this->belongsTo(Constant::class, 'issue_field', 'id')
+            ->where('type', ConstantsTypes::PositionsTypes->value);
     }
 }

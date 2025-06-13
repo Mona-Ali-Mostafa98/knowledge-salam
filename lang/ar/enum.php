@@ -48,7 +48,7 @@ return [
     'articles_types' => 'أنواع المقالات والتقارير',
     'source_locations' => 'مكان المصدر',
     'positions_types' => 'أنواع المواقف',
-    'issues_names' => 'أسماء القضايا',
+    'issues_types' => 'انواع القضايا',
     'achievements' => 'الإنجازات',
 
     'political_positions' => 'المواقف السياسية',
