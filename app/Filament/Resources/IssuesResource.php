@@ -48,12 +48,15 @@ class IssuesResource extends Resource
                     Select::make('issue_field')
                         ->relationship('issueField', 'name')
                         ->label(__(self::$langFile . '.issue_field')),
+                    Forms\Components\Textarea::make('issue_description')
+                        ->label(__(self::$langFile.'.issue_description'))
+                        ->columnSpanFull(),
                     Forms\Components\Textarea::make('saudi_direction')
                         ->label(__(self::$langFile.'.direction'))
                         ->required()
                         ->columnSpanFull(),
-                    Forms\Components\Textarea::make('issue_description')
-                        ->label(__(self::$langFile.'.issue_description'))
+                    Forms\Components\Textarea::make('official_response')
+                        ->label(__(self::$langFile.'.official_response'))
                         ->columnSpanFull(),
                 ])->columns(),
             ]);
