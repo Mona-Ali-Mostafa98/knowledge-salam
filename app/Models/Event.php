@@ -30,9 +30,21 @@ class Event extends Model
             }
         });
     }
+
+    public function articleOrReportData(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(ArticleOrReportData::class, 'event_id');
+    }
+
     public function created_user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by', 'id')->withDefault('-');
+    }
+
+    public function continent(): BelongsTo
+    {
+        return $this->belongsTo(Constant::class, 'continent_id')
+            ->where('type', ConstantsTypes::Continent->value);
     }
 
     public function country(): BelongsTo

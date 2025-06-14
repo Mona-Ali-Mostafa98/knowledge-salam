@@ -54,6 +54,7 @@ return new class extends Migration
             $table->integer('fame_reasons_id')->nullable()->comment('سبب الشهرة (معرف من جدول أسباب الشهرة)');
 
             $table->longText('resources')->nullable()->comment('مصادر وروابط إضافية عن الشخصية');
+            $table->unsignedBigInteger('created_by')->nullable()->comment('مضاف بواسطة');
 
             $table->enum('approval_status', ['pending', 'reviewed', 'approved', 'rejected'])->default('pending')->comment('حالة الطلب');
             $table->boolean('send_to_reviewer')->default(false)->comment('هل تم الارسال للمراجعة؟');
@@ -61,6 +62,8 @@ return new class extends Migration
             $table->boolean('send_to_approval')->default(false)->comment('هل تم الارسال للاعتماد؟');
             $table->unsignedBigInteger('approved_by')->nullable()->comment('المستخدم الذي قام بالتحكيم');
             $table->boolean('is_published')->default(false)->comment('تم النشر في النظام؟');
+            $table->unsignedBigInteger('published_by')->nullable()->comment('المستخدم الذي قام بالنشر');
+            $table->timestamp('publish_date')->nullable()->comment('تاريخ النشر في النظام');
             $table->date('expire_date')->nullable()->comment('تاريخ انتهاء الصلاحية');
 
             $table->timestamps();

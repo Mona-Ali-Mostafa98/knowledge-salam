@@ -98,14 +98,14 @@ class UserResource extends Resource
                     ->reactive()
                     ->afterStateUpdated(function ($state, callable $set) {
                         if ($state === 'approved') {
-                            $set('approved_at', now());
+                            $set('publish_date', now());
                         } else {
-                            $set('approved_at', null);
+                            $set('publish_date', null);
                         }
                     }),
 
-                Forms\Components\DateTimePicker::make('approved_at')
-                    ->label(__('person.approved_at'))
+                Forms\Components\DateTimePicker::make('publish_date')
+                    ->label(__('person.publish_date'))
                     ->dehydrated(fn($get) => $get('approval_status') === 'approved')
                     ->disabled(fn($get) => $get('approval_status') !== 'approved')
                     ->reactive(),
@@ -185,8 +185,8 @@ class UserResource extends Resource
                             $record->save();
                         }
                     }),
-                Tables\Columns\TextColumn::make('approved_at')
-                    ->label(__('person.approved_at'))
+                Tables\Columns\TextColumn::make('publish_date')
+                    ->label(__('person.publish_date'))
                     ->dateTime('Y-m-d H:i')
                     ->sortable()
                     ->toggleable(),

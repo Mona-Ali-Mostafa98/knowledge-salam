@@ -124,15 +124,6 @@ class Person extends Model
     }
 
 
-    public function articles(): HasMany
-    {
-        return $this->hasMany(SaudiArticles::class, 'person_id', 'id');
-    }
-
-    public function positions(): HasMany
-    {
-        return $this->hasMany(SaudiPositions::class, 'person_id', 'id');
-    }
 
     public function influences(): HasMany
     {

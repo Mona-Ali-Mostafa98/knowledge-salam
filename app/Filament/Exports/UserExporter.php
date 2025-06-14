@@ -41,8 +41,8 @@ class UserExporter extends Exporter
                 ->label(__(self::$langFile . '.requested_role')),
             ExportColumn::make('approval_status')
                 ->label(__(self::$langFile . '.approval_status')),
-            ExportColumn::make('approved_at')
-                ->label(__(self::$langFile . '.approved_at')),
+            ExportColumn::make('publish_date')
+                ->label(__(self::$langFile . '.publish_date')),
             ExportColumn::make('deleted_at')
                 ->label(__(self::$langFile . '.created_at')),
             ExportColumn::make('updated_at')

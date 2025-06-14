@@ -5,7 +5,6 @@ namespace App\Imports;
 use App\Models\City;
 use App\Models\Constant;
 use App\Models\Country;
-use App\Models\SaudiArticles;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 
@@ -266,33 +265,6 @@ class ArticleImport implements ToModel
                     }
                 }
             }
-
-            SaudiArticles::create([
-                'title' => ['ar' => $row[2] ?? '', 'en' => $row[3] ?? ''],
-                'link' => $row[9] ?? null,
-                'publish_date' => $publish_date,
-                'publish_institution' => $row[6] ?? null,
-                'details' => $row[10] ?? null,
-                'tags' => $tags,
-                'article_type_id' => $article_type_id,
-                //                'source_location_id' => $source_location_id,
-                'publish_institution_type_id' => $publish_institution_type_id,
-                'continent_id' => $continent_id,
-                'country_id' => $country->id ?? 0,
-                'countries' => $countries_array,
-                'language_id' => $language_id,
-                'added_reason_id' => $added_reason_id,
-                'repetition_id' => $repetition_id,
-                'saudi_issue_direction_id' => $saudi_issue_direction_id,
-                'dimension_id' => $dimension_id,
-                'dimension_text' => $row[20] ?? null,
-                'contribution_type_id' => $contribution_type_id,
-                'contribution_name' => ['ar' => $row[22] ?? '', 'en' => $row[23] ?? ''],
-                'organizations_role_id' => $organizations_role_id,
-                'contribution_role_id' => $contribution_role_id,
-                'report_direction_id' => $report_direction_id,
-                'cities' => $cities_array,
-            ]);
         }
     }
 }

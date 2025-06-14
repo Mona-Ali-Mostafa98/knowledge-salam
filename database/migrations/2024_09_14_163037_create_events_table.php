@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title', 255)->comment('عنوان الحدث');
             // address
+            $table->integer('continent_id')->nullable()->comment('القارة');
             $table->integer('country_id')->nullable()->comment('دولة الحدث');
             $table->integer('city_id')->nullable()->comment('مدينة الحدث');
             $table->decimal('latitude', 10, 7)->nullable()->comment('خط العرض');
@@ -41,17 +42,19 @@ return new class extends Migration
             $table->string('url')->nullable()->comment('رابط الحدث');
             $table->enum('approval_status', ['pending', 'reviewed', 'approved', 'rejected'])->default('pending')->comment('حالة الحدث');
             $table->enum('event_status', ['scheduled', 'ongoing', 'completed', 'cancelled'])->default('scheduled')->comment('حالة تنفيذ الحدث');
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete()->comment('المستخدم الذي أضاف الحدث');
-            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete()->comment('آخر من عدّل الحدث');
+            $table->unsignedBigInteger('created_by')->nullable()->comment('مضاف بواسطة');
 //            $table->foreignId('related_event_id')->nullable()->constrained('events')->nullOnDelete()->comment('حدث مرتبط / تابع');
             $table->unsignedBigInteger('position_type_id')->nullable()->comment('نوع الموقف');
-            $table->timestamp('publish_date')->nullable()->nullable()->comment('تاريخ النشر');
             $table->text('note')->nullable()->comment('ملاحظات إضافية');
+            $table->text('attachments')->nullable()->comment('المرفقات');
+
             $table->boolean('send_to_reviewer')->default(false)->comment('هل تم الارسال للمراجعة؟');
             $table->unsignedBigInteger('reviewed_by')->nullable()->comment('المستخدم الذي قام بالمراجعة');
             $table->boolean('send_to_approval')->default(false)->comment('هل تم الارسال للاعتماد؟');
             $table->unsignedBigInteger('approved_by')->nullable()->comment('المستخدم الذي قام بالتحكيم');
             $table->boolean('is_published')->default(false)->comment('تم النشر في النظام؟');
+            $table->unsignedBigInteger('published_by')->nullable()->comment('المستخدم الذي قام بالنشر');
+            $table->timestamp('publish_date')->nullable()->nullable()->comment('تاريخ النشر');
             $table->date('expire_date')->nullable()->comment('تاريخ انتهاء الصلاحية');
 
             $table->timestamps();
