@@ -6,6 +6,7 @@ use App\Filament\Resources\ReviewedEventResource\Pages\ListReviewedEvent;
 use App\Filament\Resources\ReviewedEventResource\Pages\ViewReviewedEvent;
 use App\Models\Event;
 use Filament\Facades\Filament;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -57,4 +58,5 @@ class ReviewedEventResource extends EventResource
 
         return $user && method_exists($user, 'hasRole') && $user->hasRole('approval');
     }
+
 }

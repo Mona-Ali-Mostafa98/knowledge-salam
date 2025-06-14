@@ -58,11 +58,4 @@ class ApprovedEventResource extends EventResource
         return $user && method_exists($user, 'hasRole') && $user->hasRole(['publisher', 'super_admin']);
     }
 
-    public static function table(Table $table): Table
-    {
-        return parent::table($table)
-            ->actions([
-                \Filament\Tables\Actions\ViewAction::class::make(),
-            ]);
-    }
 }

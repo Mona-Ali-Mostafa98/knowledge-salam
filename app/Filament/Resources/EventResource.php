@@ -160,13 +160,13 @@ class EventResource extends Resource
                                             ->label(__(self::$langFile . '.event_issues'))
                                             ->searchable()
                                             ->getOptionLabelFromRecordUsing(
-                                                fn(Issues $record) => $record->title ?? '-'
+                                                fn(Issues $record) => $record->issue_name ?? '-'
                                             )
-                                            ->relationship('issue', 'title') // binds to `issue()` relation in pivot model
+                                            ->relationship('issue', 'issue_name') // binds to `issue()` relation in pivot model
                                             ->required()
                                             ->createOptionForm([
-                                                TextInput::make('title')
-                                                    ->label(__('Title'))
+                                                TextInput::make('issue_name')
+                                                    ->label(__('system.issue_name'))
                                                     ->required()
                                                     ->maxLength(255),
                                             ])
@@ -223,13 +223,13 @@ class EventResource extends Resource
                                             ->label(__(self::$langFile . '.event_issues'))
                                             ->searchable()
                                             ->getOptionLabelFromRecordUsing(
-                                                fn(Issues $record) => $record->title ?? '-'
+                                                fn(Issues $record) => $record->issue_name ?? '-'
                                             )
-                                            ->relationship('issue', 'title')
+                                            ->relationship('issue', 'issue_name') // binds to `issue()` relation in pivot model
                                             ->required()
                                             ->createOptionForm([
-                                                TextInput::make('title')
-                                                    ->label(__('Title'))
+                                                TextInput::make('issue_name')
+                                                    ->label(__('system.issue_name'))
                                                     ->required()
                                                     ->maxLength(255),
                                             ])
@@ -307,6 +307,7 @@ class EventResource extends Resource
                                 ->schema([
                                     Select::make('approval_status')
                                         ->label(__(self::$langFile . '.approval_status'))
+                                        ->default(fn($record) => $record?->approval_status ?: 'pending')
                                         ->options([
                                             'pending' => __(self::$langFile . '.approval_status_options.pending'),
                                             'reviewed' => __(self::$langFile . '.approval_status_options.reviewed'),
@@ -336,6 +337,11 @@ class EventResource extends Resource
                 Tables\Columns\TextColumn::make('title')
                     ->label(__(self::$langFile . '.title'))
                     ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_user.name')
+                    ->label(__(self::$langFile . '.created_by'))
+                    ->badge()
+                    ->color('primary')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('event_date')
                     ->label(__(self::$langFile . '.event_date'))
@@ -383,42 +389,14 @@ class EventResource extends Resource
                         default => 'secondary',
                     })
                     ->toggleable()
-                    ->alignCenter()
-                    ->action(function ($record) {
-                        if (auth()->user()?->hasRole('reviewer')) {
-                            if ($record->approval_status === 'pending') {
-                                $record->approval_status = 'reviewed';
-                            } elseif ($record->approval_status === 'reviewed') {
-                                $record->approval_status = 'pending';
-                            }
-                            $record->save();
-                        } elseif (auth()->user()?->hasRole('approval')) {
-                            if ($record->approval_status === 'reviewed') {
-                                $record->approval_status = 'approved';
-                            } elseif ($record->approval_status === 'approved') {
-                                $record->approval_status = 'reviewed';
-                            }
-                            $record->save();
-                        } elseif (auth()->user()?->hasRole('publisher') || auth()->user()?->hasRole('super_admin')) {
-                            if ($record->approval_status === 'approved') {
-                                $record->is_published = !$record->is_published;
-                                $record->save();
-                            }
-                        }
-                    }),
+                    ->alignCenter(),
                 Tables\Columns\BooleanColumn::make('is_published')
                     ->label(__(self::$langFile . '.is_published'))
                     ->sortable()
                     ->toggleable()
                     ->alignCenter()
                     ->trueIcon('heroicon-o-check')
-                    ->falseIcon('heroicon-o-x-mark')
-                    ->action(function ($record) {
-                        if (auth()->user()?->hasRole('publisher') || auth()->user()?->hasRole('super_admin')) {
-                            $record->is_published = !$record->is_published;
-                            $record->save();
-                        }
-                    }),
+                    ->falseIcon('heroicon-o-x-mark'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__(self::$langFile . '.created_at'))
                     ->dateTime()
@@ -469,8 +447,67 @@ class EventResource extends Resource
                     ->label(__(self::$langFile . '.event_status')),
             ])
             ->actions([
+                Tables\Actions\Action::make('changeApprovalStatus')
+                    ->label(__(self::$langFile . '.change_status'))
+                    ->icon('heroicon-o-adjustments-horizontal')
+                    ->color('primary')
+                    ->modalHeading(__(self::$langFile . '.change_request_status_and_publish'))
+                    ->modalSubheading(fn($record) => __(self::$langFile . '.event_title') . ' : ' . ($record?->title ?: __('(No Title)')))
+                    ->form([
+                        Forms\Components\Select::make('approval_status')
+                            ->label(__(self::$langFile . '.approval_status'))
+                            ->helperText(__(self::$langFile . '.choose_status_by_role'))
+                            ->default(fn($record) => $record?->approval_status)
+                            ->options(function () {
+                                $user = auth()->user();
+                                if ($user->hasRole('reviewer')) {
+                                    return [
+                                        'pending' => __(self::$langFile . '.approval_status_options_detailed.pending'),
+                                        'reviewed' => __(self::$langFile . '.approval_status_options_detailed.reviewed'),
+                                    ];
+                                }
+
+                                if ($user->hasRole('approval')) {
+                                    return [
+                                        'reviewed' => __(self::$langFile . '.approval_status_options_detailed.reviewed'),
+                                        'approved' => __(self::$langFile . '.approval_status_options_detailed.approved'),
+                                    ];
+                                }
+
+                                if ($user->hasRole('publisher') || $user->hasRole('super_admin')) {
+                                    return [
+                                        'pending' => __(self::$langFile . '.approval_status_options_detailed.pending'),
+                                        'reviewed' => __(self::$langFile . '.approval_status_options_detailed.reviewed'),
+                                        'approved' => __(self::$langFile . '.approval_status_options_detailed.approved'),
+                                        'rejected' => __(self::$langFile . '.approval_status_options_detailed.rejected'),
+                                    ];
+                                }
+
+                                return [];
+                            })
+                            ->required(),
+                        Forms\Components\Checkbox::make('is_published')
+                            ->label(__('نشر/إلغاء النشر في النظام'))
+                            ->helperText(__(self::$langFile . '.publish_helper_text'))
+                            ->default(fn($record) => $record?->is_published)
+                            ->visible(fn ($get, $record) =>
+                                (auth()->user()?->hasRole('publisher') || auth()->user()?->hasRole('super_admin')) &&
+                                (($get('approval_status') ?? $record?->approval_status) === 'approved')
+                            ),
+                    ])
+                    ->action(function (array $data, $record) {
+                        $record->update([
+                            'approval_status' => $data['approval_status'],
+                        ]);
+                        if (auth()->user()?->hasRole('publisher') || auth()->user()?->hasRole('super_admin') && isset($data['is_published'])) {
+                            $record->is_published = $data['is_published'] ? 1 : 0;
+                            $record->save();
+                        }
+                    })
+                    ->visible(fn($record) => auth()->user()?->hasAnyRole(['reviewer', 'approval', 'publisher', 'super_admin'])),
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->visible(fn($record) => auth()->user()?->hasAnyRole(['super_admin']))
+
             ])
             ->headerActions([
                 Tables\Actions\ExportAction::make()

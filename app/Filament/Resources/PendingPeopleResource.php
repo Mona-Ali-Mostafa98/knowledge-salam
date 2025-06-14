@@ -23,7 +23,7 @@ class PendingPeopleResource extends PersonResource
 
     public static function getPluralLabel(): ?string
     {
-        return __('system.People Records need to reviewed');
+        return __('system.People Records need to pending');
     }
 
     public static function getLabel(): ?string
@@ -58,11 +58,4 @@ class PendingPeopleResource extends PersonResource
         return $user && method_exists($user, 'hasRole') && $user->hasRole('reviewer');
     }
 
-    public static function table(Table $table): Table
-    {
-        return parent::table($table)
-            ->actions([
-                \Filament\Tables\Actions\ViewAction::class::make(),
-            ]);
-    }
 }

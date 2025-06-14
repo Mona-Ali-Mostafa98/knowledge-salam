@@ -20,6 +20,21 @@ class Event extends Model
 
     protected $guarded = [];
 
+    protected static function booted()
+    {
+        parent::booted();
+
+        static::creating(function ($event) {
+            if (auth()->check() && empty($event->created_by)) {
+                $event->created_by = auth()->id();
+            }
+        });
+    }
+    public function created_user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id')->withDefault('-');
+    }
+
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class, 'country_id', 'id');
@@ -47,7 +62,7 @@ class Event extends Model
         return $this->belongsTo(Constant::class, 'position_type_id', 'id')
             ->where('type', ConstantsTypes::PositionsTypes->value);
     }
-    
+
     /**
      * Get all people positions on issues for this event.
      */
@@ -92,7 +107,7 @@ class Event extends Model
     /**
      * Get all related organizations through positions.
      */
-    public function organizations()  
+    public function organizations()
     {
         return $this->belongsToMany(
             Organization::class,
@@ -104,7 +119,7 @@ class Event extends Model
     /**
      * Get all related issues through positions.
      */
-    public function relatedIssuesOrganizations()    
+    public function relatedIssuesOrganizations()
     {
         return $this->belongsToMany(
             Issues::class,
